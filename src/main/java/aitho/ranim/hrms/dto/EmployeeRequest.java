@@ -8,7 +8,7 @@ public record EmployeeRequest(
         String nationality,
         String birthPlace,
         String phoneNumber,
-        String workEmail,
+        String email,
         String password,
         String personalEmail,
         String address,
@@ -16,8 +16,7 @@ public record EmployeeRequest(
         String country,
         String postalCode,
         String province,
-        String workLocation,
-        String status
+        String workLocation
 ) {
 
 }

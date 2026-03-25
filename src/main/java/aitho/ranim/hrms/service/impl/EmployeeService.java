@@ -6,12 +6,15 @@ import aitho.ranim.hrms.entity.Employee;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
 import aitho.ranim.hrms.service.IEmployeeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EmployeeService implements IEmployeeService {
 
     private final IEmployeeRepository employeeRepository;
@@ -22,33 +25,15 @@ public class EmployeeService implements IEmployeeService {
         employee.setFirstName(request.firstName());
         employee.setLastName(request.lastName());
         employee.setPassword(request.password());
-        employee.setDateOfBirth(LocalDate.parse(request.dateOfBirth()));
-        employee.setGender(request.gender());
-        employee.setCity(request.city());
-        employee.setCountry(request.country());
-        employee.setNationality(request.nationality());
-        employee.setBirthPlace(request.birthPlace());
-        employee.setPhoneNumber(request.phoneNumber());
-        employee.setWorkEmail(request.workEmail());
-        employee.setPersonalEmail(request.personalEmail());
-        employee.setAddress(request.address());
-        employee.setPostalCode(request.postalCode());
-        employee.setProvince(request.province());
-        employee.setWorkLocation(request.workLocation());
-        employee.setStatus(request.status());
+        employee.setEmail(request.email());
+        employee.setStatus("PENDING");
+        employee.setActivationToken(UUID.randomUUID().toString());
 
+        log.info("Simulazione Email: Clicca qui http://localhost:8080/api/v1/employee/activate?token={}", employee.getActivationToken());
         Employee savedEmployee = employeeRepository.save(employee);
         return new EmployeeResponse(
-                savedEmployee.getId(),
-                savedEmployee.getFirstName(),
-                savedEmployee.getLastName(),
-                savedEmployee.getDateOfBirth(),
-                java.time.LocalDate.now()
-
-
+                LocalDate.now(),
+                "Dipendente creato con successo"
         );
     }
-
-
-
 }
