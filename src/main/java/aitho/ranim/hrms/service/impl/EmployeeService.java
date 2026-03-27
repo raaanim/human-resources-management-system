@@ -36,4 +36,19 @@ public class EmployeeService implements IEmployeeService {
                 "Dipendente creato con successo"
         );
     }
+
+    public EmployeeResponse activateEmployee(String token, String password) {
+        Employee employee = employeeRepository
+                .findByActivationToken(token)
+                .orElseThrow(() -> new RuntimeException("Token di attivazione non valido"));
+        employee.setPassword(password);
+        employee.setStatus("ACTIVE");
+        employee.setActivationToken(null);
+        employeeRepository.save(employee);
+
+        return new EmployeeResponse(
+                LocalDate.now(),
+                "Dipendente attivato con successo"
+        );
+    }
 }
