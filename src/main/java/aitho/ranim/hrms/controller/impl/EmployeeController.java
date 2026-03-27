@@ -26,7 +26,7 @@ public class EmployeeController implements IEmployeeController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     };
 
-    // POST path = /activate
+    
     @PostMapping("/activate")
     public ResponseEntity<EmployeeResponse> activateEmployee(@Valid @RequestParam("token") String token, @RequestBody ActivateAccountRequest request) {
         EmployeeResponse response = employeeService.activateEmployee(token, request.newPassword());
