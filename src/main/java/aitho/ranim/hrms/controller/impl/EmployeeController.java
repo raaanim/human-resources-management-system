@@ -19,7 +19,7 @@ public class EmployeeController implements IEmployeeController {
         this.employeeService = employeeService;
     }
 
-    //POST path = api/v1/employee
+    
     @PostMapping
     public ResponseEntity<EmployeeResponse> createEmployee(@Valid @RequestBody EmployeeRequest request) {
         EmployeeResponse response = employeeService.createEmployee(request);
