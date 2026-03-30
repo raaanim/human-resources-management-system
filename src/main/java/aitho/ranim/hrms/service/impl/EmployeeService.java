@@ -1,5 +1,6 @@
 package aitho.ranim.hrms.service.impl;
 
+import aitho.ranim.hrms.dto.ActivateEmployeeResponse;
 import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.dto.EmployeeResponse;
 import aitho.ranim.hrms.entity.Employee;
@@ -37,7 +38,7 @@ public class EmployeeService implements IEmployeeService {
         );
     }
 
-    public EmployeeResponse activateEmployee(String token, String password) {
+    public ActivateEmployeeResponse activateEmployee(String token, String password) {
         Employee employee = employeeRepository
                 .findByActivationToken(token)
                 .orElseThrow(() -> new RuntimeException("Token di attivazione non valido"));
@@ -46,7 +47,7 @@ public class EmployeeService implements IEmployeeService {
         employee.setActivationToken(null);
         employeeRepository.save(employee);
 
-        return new EmployeeResponse(
+        return new ActivateEmployeeResponse(
                 LocalDate.now(),
                 "Dipendente attivato con successo"
         );
