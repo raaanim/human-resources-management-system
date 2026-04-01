@@ -1,5 +1,6 @@
 package aitho.ranim.hrms.service.impl;
 
+import aitho.ranim.hrms.dto.ActivateAccountRequest;
 import aitho.ranim.hrms.dto.ActivateEmployeeResponse;
 import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.dto.EmployeeResponse;
@@ -8,6 +9,8 @@ import aitho.ranim.hrms.repository.IEmployeeRepository;
 import aitho.ranim.hrms.service.IEmployeeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,13 +22,14 @@ import java.util.UUID;
 public class EmployeeService implements IEmployeeService {
 
     private final IEmployeeRepository employeeRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public EmployeeResponse createEmployee(EmployeeRequest request) {
         Employee employee  = new Employee();
         employee.setFirstName(request.firstName());
         employee.setLastName(request.lastName());
-        employee.setPassword(request.password());
+        employee.setPassword(passwordEncoder.encode(request.password()));
         employee.setEmail(request.email());
         employee.setStatus("PENDING");
         employee.setActivationToken(UUID.randomUUID().toString());
@@ -38,11 +42,11 @@ public class EmployeeService implements IEmployeeService {
         );
     }
 
-    public ActivateEmployeeResponse activateEmployee(String token, String password) {
+    public ActivateEmployeeResponse activateEmployee(String token, ActivateAccountRequest request) {
         Employee employee = employeeRepository
                 .findByActivationToken(token)
                 .orElseThrow(() -> new RuntimeException("Token di attivazione non valido"));
-        employee.setPassword(password);
+        employee.setPassword(passwordEncoder.encode(request.newPassword()));
         employee.setStatus("ACTIVE");
         employee.setActivationToken(null);
         employeeRepository.save(employee);

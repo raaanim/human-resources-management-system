@@ -20,18 +20,17 @@ public class EmployeeController implements IEmployeeController {
         this.employeeService = employeeService;
     }
 
-    
+    //POST path = api/v1/employee
     @PostMapping
     public ResponseEntity<EmployeeResponse> createEmployee(@Valid @RequestBody EmployeeRequest request) {
         EmployeeResponse response = employeeService.createEmployee(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     };
 
-    
+    //POST path = http://localhost:8080/api/v1/employee/activate?token={}
     @PostMapping("/activate")
     public ResponseEntity<ActivateEmployeeResponse> activateEmployee(@Valid @RequestParam("token") String token, @RequestBody ActivateAccountRequest request) {
-        ActivateEmployeeResponse response = employeeService.activateEmployee(token, request.newPassword());
+        ActivateEmployeeResponse response = employeeService.activateEmployee(token, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 }
