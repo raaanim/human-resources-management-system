@@ -1,6 +1,8 @@
 package aitho.ranim.hrms.controller.impl;
 
 import aitho.ranim.hrms.controller.IEmployeeController;
+import aitho.ranim.hrms.dto.ActivateAccountRequest;
+import aitho.ranim.hrms.dto.ActivateEmployeeResponse;
 import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.dto.EmployeeResponse;
 import aitho.ranim.hrms.service.IEmployeeService;
@@ -25,6 +27,10 @@ public class EmployeeController implements IEmployeeController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     };
 
-
-
+    //POST path = http://localhost:8080/api/v1/employee/activate?token={}
+    @PostMapping("/activate")
+    public ResponseEntity<ActivateEmployeeResponse> activateEmployee(@Valid @RequestParam("token") String token, @RequestBody ActivateAccountRequest request) {
+        ActivateEmployeeResponse response = employeeService.activateEmployee(token, request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
