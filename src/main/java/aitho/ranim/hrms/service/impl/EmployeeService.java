@@ -5,11 +5,12 @@ import aitho.ranim.hrms.dto.ActivateEmployeeResponse;
 import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.dto.EmployeeResponse;
 import aitho.ranim.hrms.entity.Employee;
+import aitho.ranim.hrms.exception.EmployeeException;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
 import aitho.ranim.hrms.service.IEmployeeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +46,7 @@ public class EmployeeService implements IEmployeeService {
     public ActivateEmployeeResponse activateEmployee(String token, ActivateAccountRequest request) {
         Employee employee = employeeRepository
                 .findByActivationToken(token)
-                .orElseThrow(() -> new RuntimeException("Token di attivazione non valido"));
+                .orElseThrow(() -> new EmployeeException("Token non valido", HttpStatus.NOT_FOUND, "/activate"));
         employee.setPassword(passwordEncoder.encode(request.newPassword()));
         employee.setStatus("ACTIVE");
         employee.setActivationToken(null);
