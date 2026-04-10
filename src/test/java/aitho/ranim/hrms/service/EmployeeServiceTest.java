@@ -35,7 +35,7 @@ public class EmployeeServiceTest {
         EmployeeRequest request = new EmployeeRequest(
                 "John",
                 "Doe",
-                LocalDate.of(1990,01,01),
+                LocalDate.of(1990, 1, 1),
                 "Male",
                 "American",
                 "New York",
