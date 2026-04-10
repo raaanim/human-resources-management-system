@@ -2,8 +2,6 @@ package aitho.ranim.hrms.dto;
 
 import jakarta.validation.constraints.*;
 
-import java.time.LocalDate;
-
 public record EmployeeRequest(
         @NotBlank(message = "First name is required")
         @Size(min = 1, max = 50, message = "First name must be between 1 and 50 characters")
@@ -11,9 +9,7 @@ public record EmployeeRequest(
         @NotBlank(message = "Last name is required")
         @Size(min = 1, max = 100, message = "Last name must be between 1 and 100 characters")
         String lastName,
-        @Past
-        @NotNull
-        LocalDate dateOfBirth,
+        String dateOfBirth,
         String gender,
         @NotBlank
         String nationality,
