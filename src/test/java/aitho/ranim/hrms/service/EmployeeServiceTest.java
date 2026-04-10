@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,7 +35,7 @@ public class EmployeeServiceTest {
         EmployeeRequest request = new EmployeeRequest(
                 "John",
                 "Doe",
-                "1990-01-01",
+                LocalDate.of(1990,01,01),
                 "Male",
                 "American",
                 "New York",
