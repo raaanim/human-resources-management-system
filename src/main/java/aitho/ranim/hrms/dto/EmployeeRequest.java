@@ -30,7 +30,7 @@ public record EmployeeRequest(
         @Size(min = 8, max = 100)
         @Pattern(
                 regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-={}\\[\\]:;\"'<>,.?/]).{8,}$",
-                message = "Minimo 8 caratteri, maiuscole, minuscole, numero e simbolo"
+                message = "Minimum 8 characters, including uppercase, lowercase, number, and symbol"
         )
         String password,
         @NotBlank
