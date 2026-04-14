@@ -11,7 +11,7 @@ public record EmployeeRequest(
         @NotBlank(message = "Last name is required")
         @Size(min = 1, max = 100, message = "Last name must be between 1 and 100 characters")
         String lastName,
-        @Past
+        @Past(message = "Date of birth must be in the past")
         @NotNull
         LocalDate dateOfBirth,
         String gender,
