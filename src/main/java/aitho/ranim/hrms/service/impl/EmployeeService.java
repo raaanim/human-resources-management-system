@@ -5,11 +5,12 @@ import aitho.ranim.hrms.dto.ActivateEmployeeResponse;
 import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.dto.EmployeeResponse;
 import aitho.ranim.hrms.entity.Employee;
+import aitho.ranim.hrms.exception.EmployeeException;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
 import aitho.ranim.hrms.service.IEmployeeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,18 +35,18 @@ public class EmployeeService implements IEmployeeService {
         employee.setStatus("PENDING");
         employee.setActivationToken(UUID.randomUUID().toString());
 
-        log.info("Simulazione Email: Clicca qui http://localhost:8080/api/v1/employee/activate?token={}", employee.getActivationToken());
+        log.info("Email simulation: Click here http://localhost:8080/api/v1/employee/activate?token={}", employee.getActivationToken());
         Employee savedEmployee = employeeRepository.save(employee);
         return new EmployeeResponse(
                 LocalDate.now(),
-                "Dipendente creato con successo"
+                "Employee successfully created"
         );
     }
 
     public ActivateEmployeeResponse activateEmployee(String token, ActivateAccountRequest request) {
         Employee employee = employeeRepository
                 .findByActivationToken(token)
-                .orElseThrow(() -> new RuntimeException("Token di attivazione non valido"));
+                .orElseThrow(() -> new EmployeeException("Invalid activation token", HttpStatus.NOT_FOUND, "/activate"));
         employee.setPassword(passwordEncoder.encode(request.newPassword()));
         employee.setStatus("ACTIVE");
         employee.setActivationToken(null);
@@ -53,7 +54,7 @@ public class EmployeeService implements IEmployeeService {
 
         return new ActivateEmployeeResponse(
                 LocalDate.now(),
-                "Dipendente attivato con successo"
+                "Employee successfully activated"
         );
     }
 }
