@@ -7,6 +7,7 @@ import aitho.ranim.hrms.dto.EmployeeResponse;
 import aitho.ranim.hrms.entity.Employee;
 import aitho.ranim.hrms.exception.EmployeeException;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
+import aitho.ranim.hrms.service.IEmailService;
 import aitho.ranim.hrms.service.IEmployeeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ public class EmployeeService implements IEmployeeService {
 
     private final IEmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
+    private final IEmailService emailService;
 
     @Override
     public EmployeeResponse createEmployee(EmployeeRequest request) {
@@ -35,11 +37,13 @@ public class EmployeeService implements IEmployeeService {
         employee.setStatus("PENDING");
         employee.setActivationToken(UUID.randomUUID().toString());
 
-        log.info("Email simulation: Click here http://localhost:8080/api/v1/employee/activate?token={}", employee.getActivationToken());
         Employee savedEmployee = employeeRepository.save(employee);
+
+        String activationLink = "http://localhost:8080/api/v1/employee/activate/" + savedEmployee.getActivationToken();
+        emailService.sendActivationEmail(savedEmployee, activationLink);
         return new EmployeeResponse(
                 LocalDate.now(),
-                "Employee successfully created"
+                "Employee profile successfully created"
         );
     }
 
@@ -51,10 +55,10 @@ public class EmployeeService implements IEmployeeService {
         employee.setStatus("ACTIVE");
         employee.setActivationToken(null);
         employeeRepository.save(employee);
-
+        emailService.sendWelcomeEmail(employee);
         return new ActivateEmployeeResponse(
                 LocalDate.now(),
-                "Employee successfully activated"
+                "Employee profile successfully activated"
         );
     }
 }

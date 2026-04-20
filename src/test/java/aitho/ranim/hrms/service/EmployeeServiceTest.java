@@ -4,6 +4,7 @@ import aitho.ranim.hrms.dto.ActivateAccountRequest;
 import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.entity.Employee;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
+import aitho.ranim.hrms.service.impl.EmailService;
 import aitho.ranim.hrms.service.impl.EmployeeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,9 @@ public class EmployeeServiceTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private IEmailService emailService;
 
     @InjectMocks
     private EmployeeService employeeService;
@@ -105,6 +109,38 @@ public class EmployeeServiceTest {
         });
 
         verify(employeeRepository, never()).save(any());
+    }
+
+    @Test
+    public void testSendActivationEmail() {
+
+        EmployeeRequest request = new EmployeeRequest(
+                "John",
+                "Doe",
+                LocalDate.of(1990, 1, 1),
+                "Male",
+                "American",
+                "New York",
+                "+1 212-345-6789",
+                "johndoe@email.com",
+                "123John$$Doe",
+                "johndoepersonal@email.com",
+                "350 5th Avenue",
+                "New York",
+                "USA",
+                "10118",
+                "NY",
+                "New York"
+        );
+
+        when(passwordEncoder.encode(anyString())).thenReturn("encoded");
+        when(employeeRepository.save(any(Employee.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        employeeService.createEmployee(request);
+
+        verify(emailService, times(1))
+                .sendActivationEmail(any(Employee.class), anyString());
     }
 
 }
