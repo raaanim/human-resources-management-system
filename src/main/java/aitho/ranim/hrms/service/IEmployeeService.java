@@ -5,10 +5,11 @@ import aitho.ranim.hrms.dto.ActivateEmployeeResponse;
 import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.dto.EmployeeResponse;
 import aitho.ranim.hrms.entity.Employee;
+import aitho.ranim.hrms.viewmodel.EmployeeViewModel;
 import jakarta.validation.Valid;
 
 public interface IEmployeeService {
     EmployeeResponse createEmployee(EmployeeRequest request);
 
-    ActivateEmployeeResponse activateEmployee(String token, ActivateAccountRequest request);
+    EmployeeViewModel activateEmployee(String token);
 }

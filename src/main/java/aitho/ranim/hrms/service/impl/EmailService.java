@@ -44,8 +44,7 @@ public class EmailService implements IEmailService {
     public void sendWelcomeEmail(Employee employee) {
         try {
             Context context = new Context();
-            context.setVariable("name", employee.getFirstName());
-            context.setVariable("surname", employee.getLastName());
+            context.setVariable("employee", employee);
 
             String html = templateEngine.process("welcome-email", context);
 

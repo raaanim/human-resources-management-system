@@ -9,6 +9,7 @@ import aitho.ranim.hrms.exception.EmployeeException;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
 import aitho.ranim.hrms.service.IEmailService;
 import aitho.ranim.hrms.service.IEmployeeService;
+import aitho.ranim.hrms.viewmodel.EmployeeViewModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,7 @@ public class EmployeeService implements IEmployeeService {
 
         Employee savedEmployee = employeeRepository.save(employee);
 
-        String activationLink = "http://localhost:8080/api/v1/employee/activate/" + savedEmployee.getActivationToken();
+        String activationLink = "http://localhost:8080/employee/activate/" + savedEmployee.getActivationToken();
         emailService.sendActivationEmail(savedEmployee, activationLink);
         return new EmployeeResponse(
                 LocalDate.now(),
@@ -47,18 +48,17 @@ public class EmployeeService implements IEmployeeService {
         );
     }
 
-    public ActivateEmployeeResponse activateEmployee(String token, ActivateAccountRequest request) {
+    public EmployeeViewModel activateEmployee(String token) {
         Employee employee = employeeRepository
                 .findByActivationToken(token)
                 .orElseThrow(() -> new EmployeeException("Invalid activation token", HttpStatus.NOT_FOUND, "/activate"));
-        employee.setPassword(passwordEncoder.encode(request.newPassword()));
         employee.setStatus("ACTIVE");
         employee.setActivationToken(null);
         employeeRepository.save(employee);
         emailService.sendWelcomeEmail(employee);
-        return new ActivateEmployeeResponse(
-                LocalDate.now(),
-                "Employee profile successfully activated"
+        return new EmployeeViewModel(
+                employee.getFirstName(),
+                employee.getLastName()
         );
     }
 }
