@@ -1,7 +1,5 @@
 package aitho.ranim.hrms.service.impl;
 
-import aitho.ranim.hrms.dto.ActivateAccountRequest;
-import aitho.ranim.hrms.dto.ActivateEmployeeResponse;
 import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.dto.EmployeeResponse;
 import aitho.ranim.hrms.entity.Employee;

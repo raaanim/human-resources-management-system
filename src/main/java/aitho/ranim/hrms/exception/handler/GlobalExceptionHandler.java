@@ -1,6 +1,8 @@
 package aitho.ranim.hrms.exception.handler;
 
 import aitho.ranim.hrms.exception.CustomErrorResponse;
+import aitho.ranim.hrms.exception.EmailCustomException;
+import aitho.ranim.hrms.exception.EmailErrorResponse;
 import aitho.ranim.hrms.exception.EmployeeException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +38,24 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(e.getStatusCode()).body(errorResponse);
     }
 
+    @ExceptionHandler(value = {EmailCustomException.class})
+    public ResponseEntity<EmailErrorResponse> handleEmailException(EmailCustomException e) {
+        log.error("An email error occurred: {}", e.getMessage());
+
+        EmailErrorResponse errorResponse = new EmailErrorResponse(
+                LocalDateTime.now().toString(),
+                e.getStatusCode(),
+                e.getMessage(),
+                e.getCause() != null ? e.getCause().toString() : "No additional error details"
+        );
+        return ResponseEntity.status(e.getStatusCode()).body(errorResponse);
+    }
+
+
+
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<CustomErrorResponse> handleException(MethodArgumentNotValidException e, HttpServletRequest request) {
-        log.error("An error occurred: {}", e.getMessage());
+        log.error("Found an error: {}", e.getMessage());
 
         String message = e.getBindingResult()
                 .getFieldErrors()

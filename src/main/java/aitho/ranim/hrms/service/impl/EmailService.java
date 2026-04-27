@@ -1,9 +1,10 @@
 package aitho.ranim.hrms.service.impl;
-
-import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.entity.Employee;
+import aitho.ranim.hrms.exception.EmailCustomException;
 import aitho.ranim.hrms.service.IEmailService;
 import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 
 
 @Service
+@Slf4j
 public class EmailService implements IEmailService {
 
     private final JavaMailSender mailSender;
@@ -36,22 +38,24 @@ public class EmailService implements IEmailService {
             sendHtml(employee.getEmail(), "Account activation", html);
 
         } catch (Exception e) {
-            System.err.println("Error sending activation email: " + e.getMessage());
+            log.error("Failed sending email to {}", employee.getEmail(), e);
+            throw new EmailCustomException("Failed to send email: ", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
     public void sendWelcomeEmail(Employee employee) {
         try {
+
             Context context = new Context();
             context.setVariable("employee", employee);
 
             String html = templateEngine.process("welcome-email", context);
 
             sendHtml(employee.getEmail(), "Welcome", html);
-
         } catch (Exception e) {
-            System.err.println("Error sending welcome email: " + e.getMessage());
+            log.error("Failed sending email to {}", employee.getEmail(), e);
+            throw new EmailCustomException("Failed to send email: ", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -68,7 +72,8 @@ public class EmailService implements IEmailService {
             mailSender.send(message);
 
         } catch (Exception e) {
-            System.err.println("Error sending email to " + to + ": " + e.getMessage());
+            log.error("Failed sending email to {}", to, e);
+            throw new EmailCustomException("Failed to send email: ", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
