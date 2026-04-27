@@ -3,6 +3,7 @@ package aitho.ranim.hrms.service;
 import aitho.ranim.hrms.dto.ActivateAccountRequest;
 import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.entity.Employee;
+import aitho.ranim.hrms.exception.EmployeeException;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
 import aitho.ranim.hrms.service.impl.EmployeeService;
 import org.junit.jupiter.api.Test;
@@ -50,7 +51,7 @@ public class EmployeeServiceTest {
                 "NY",
                 "New York"
         );
-        when(passwordEncoder.encode("123John$$Doe"))
+        when(passwordEncoder.encode(anyString()))
                 .thenReturn("encodedPassword");
 
         when(employeeRepository.save(any(Employee.class)))
@@ -60,7 +61,7 @@ public class EmployeeServiceTest {
 
         assertNotNull(response);
 
-        verify(passwordEncoder, times(1)).encode("123John$$Doe");
+        verify(passwordEncoder, times(1)).encode(anyString());
         verify(employeeRepository, times(1)).save(any(Employee.class));
     }
 
@@ -100,7 +101,7 @@ public class EmployeeServiceTest {
         when(employeeRepository.findByActivationToken(token))
                 .thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> {
+        assertThrows(EmployeeException.class, () -> {
             employeeService.activateEmployee(token, request);
         });
 

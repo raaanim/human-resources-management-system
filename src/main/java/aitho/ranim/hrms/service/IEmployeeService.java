@@ -1,14 +1,20 @@
 package aitho.ranim.hrms.service;
 
-import aitho.ranim.hrms.dto.ActivateAccountRequest;
-import aitho.ranim.hrms.dto.ActivateEmployeeResponse;
-import aitho.ranim.hrms.dto.EmployeeRequest;
-import aitho.ranim.hrms.dto.EmployeeResponse;
-import aitho.ranim.hrms.entity.Employee;
+import aitho.ranim.hrms.dto.*;
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 public interface IEmployeeService {
-    EmployeeResponse createEmployee(EmployeeRequest request);
+    CreateEmployeeResponse createEmployee(EmployeeRequest request);
 
     ActivateEmployeeResponse activateEmployee(String token, ActivateAccountRequest request);
+
+    EmployeeDetailResponse getEmployeeById(Long id);
+
+    List<EmployeeSummaryResponse> getAllEmployees();
+
+    UpdateEmployeeResponse updateEmployee(Long id, UpdateEmployeeRequest request);
+
+    void deleteEmployee(Long id);
 }
