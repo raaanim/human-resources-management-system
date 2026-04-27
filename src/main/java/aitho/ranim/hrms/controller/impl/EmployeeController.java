@@ -4,6 +4,7 @@ import aitho.ranim.hrms.controller.IEmployeeController;
 import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.dto.EmployeeResponse;
 import aitho.ranim.hrms.service.IEmployeeService;
+import aitho.ranim.hrms.viewmodel.EmployeeViewModel;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ public class EmployeeController implements IEmployeeController {
 
     //POST path = api/v1/employee
     @PostMapping
+    @Override
     public ResponseEntity<EmployeeResponse> createEmployee(@Valid @RequestBody EmployeeRequest request) {
         EmployeeResponse response = employeeService.createEmployee(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);

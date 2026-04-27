@@ -21,6 +21,7 @@ public class EmployeeViewController implements IEmployeeViewController {
 
     //GET path = http://localhost:8080/api/v1/employee/activate/{token}
     @GetMapping("/activate/{token}")
+    @Override
     public String activateEmployee(@PathVariable String token, Model model) {
         EmployeeViewModel viewModel = employeeService.activateEmployee(token);
 
