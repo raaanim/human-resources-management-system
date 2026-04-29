@@ -27,6 +27,9 @@ public class EmployeeServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private IEmailService emailService;
+
     @InjectMocks
     private EmployeeService employeeService;
 
@@ -78,14 +81,10 @@ public class EmployeeServiceTest {
         when(employeeRepository.findByActivationToken(token))
                 .thenReturn(Optional.of(employee));
 
-        when(passwordEncoder.encode("newPassword"))
-                .thenReturn("encodedNewPassword");
-
-        employeeService.activateEmployee(token, request);
+        employeeService.activateEmployee(token);
 
         assertEquals("ACTIVE", employee.getStatus());
         assertNull(employee.getActivationToken());
-        assertEquals("encodedNewPassword", employee.getPassword());
 
         verify(employeeRepository, times(1)).save(employee);
 
@@ -101,10 +100,9 @@ public class EmployeeServiceTest {
                 .thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class, () -> {
-            employeeService.activateEmployee(token, request);
+            employeeService.activateEmployee(token);
         });
 
         verify(employeeRepository, never()).save(any());
     }
-
 }
