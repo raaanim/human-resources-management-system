@@ -38,7 +38,7 @@ public class EmployeeService implements IEmployeeService {
 
         Employee savedEmployee = employeeRepository.save(employee);
 
-        String activationLink = "http://localhost:8080/employee/activate/" + savedEmployee.getActivationToken();
+        String activationLink = "http://localhost:8080/view/v1/employee/activate/" + savedEmployee.getActivationToken();
         emailService.sendActivationEmail(savedEmployee, activationLink);
         return new EmployeeResponse(
                 LocalDate.now(),
