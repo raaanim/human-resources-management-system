@@ -100,13 +100,9 @@ public class EmployeeServiceTest {
         when(employeeRepository.findByActivationToken(token))
                 .thenReturn(Optional.empty());
 
-<<<<<<< HEAD
-        assertThrows(EmployeeException.class, () -> {
-            employeeService.activateEmployee(token, request);
-=======
+
         assertThrows(RuntimeException.class, () -> {
             employeeService.activateEmployee(token);
->>>>>>> origin/main
         });
 
         verify(employeeRepository, never()).save(any());
