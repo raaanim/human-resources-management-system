@@ -1,11 +1,14 @@
 package aitho.ranim.hrms.service.impl;
 
 import aitho.ranim.hrms.dto.*;
+import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.entity.Employee;
 import aitho.ranim.hrms.exception.EmployeeException;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
+import aitho.ranim.hrms.service.IEmailService;
 import aitho.ranim.hrms.service.IEmployeeService;
 import aitho.ranim.hrms.utils.EmployeeUtils;
+import aitho.ranim.hrms.viewmodel.EmployeeViewModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,7 @@ public class EmployeeService implements IEmployeeService {
 
     private final IEmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
+    private final IEmailService emailService;
 
     @Override
     public CreateEmployeeResponse createEmployee(EmployeeRequest request) {
@@ -30,27 +34,29 @@ public class EmployeeService implements IEmployeeService {
         employee.setPassword(passwordEncoder.encode(request.password()));
         employee.setStatus("PENDING");
         employee.setActivationToken(UUID.randomUUID().toString());
-        log.info("Email simulation: Click here http://localhost:8080/api/v1/employee/activate?token={}", employee.getActivationToken());
+
         Employee savedEmployee = employeeRepository.save(employee);
 
+        String activationLink = "http://localhost:8080/employee/activate/" + savedEmployee.getActivationToken();
+        emailService.sendActivationEmail(savedEmployee, activationLink);
         return new CreateEmployeeResponse(
                 LocalDate.now(),
-                "Employee successfully created"
+                "Employee profile successfully created"
         );
     }
 
-    public ActivateEmployeeResponse activateEmployee(String token, ActivateAccountRequest request) {
+
+    public EmployeeViewModel activateEmployee(String token) {
         Employee employee = employeeRepository
                 .findByActivationToken(token)
                 .orElseThrow(() -> new EmployeeException("Invalid activation token", HttpStatus.NOT_FOUND, "/activate"));
-        employee.setPassword(passwordEncoder.encode(request.newPassword()));
         employee.setStatus("ACTIVE");
         employee.setActivationToken(null);
         employeeRepository.save(employee);
-
-        return new ActivateEmployeeResponse(
-                LocalDate.now(),
-                "Employee successfully activated"
+        emailService.sendWelcomeEmail(employee);
+        return new EmployeeViewModel(
+                employee.getFirstName(),
+                employee.getLastName()
         );
     }
 

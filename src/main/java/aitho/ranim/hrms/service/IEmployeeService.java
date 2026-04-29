@@ -1,14 +1,12 @@
 package aitho.ranim.hrms.service;
 
 import aitho.ranim.hrms.dto.*;
-import jakarta.validation.Valid;
-
+import aitho.ranim.hrms.dto.EmployeeRequest;
+import aitho.ranim.hrms.viewmodel.EmployeeViewModel;
 import java.util.List;
 
 public interface IEmployeeService {
     CreateEmployeeResponse createEmployee(EmployeeRequest request);
-
-    ActivateEmployeeResponse activateEmployee(String token, ActivateAccountRequest request);
 
     EmployeeDetailResponse getEmployeeById(Long id);
 
@@ -17,4 +15,6 @@ public interface IEmployeeService {
     UpdateEmployeeResponse updateEmployee(Long id, UpdateEmployeeRequest request);
 
     void deleteEmployee(Long id);
+
+    EmployeeViewModel activateEmployee(String token);
 }
