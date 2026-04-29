@@ -1,14 +1,15 @@
 package aitho.ranim.hrms.controller.impl;
 
 import aitho.ranim.hrms.controller.IEmployeeController;
+import aitho.ranim.hrms.dto.*;
 import aitho.ranim.hrms.dto.EmployeeRequest;
-import aitho.ranim.hrms.dto.EmployeeResponse;
 import aitho.ranim.hrms.service.IEmployeeService;
-import aitho.ranim.hrms.viewmodel.EmployeeViewModel;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/employee")
@@ -21,9 +22,35 @@ public class EmployeeController implements IEmployeeController {
 
     //POST path = api/v1/employee
     @PostMapping
-    @Override
-    public ResponseEntity<EmployeeResponse> createEmployee(@Valid @RequestBody EmployeeRequest request) {
-        EmployeeResponse response = employeeService.createEmployee(request);
+    public ResponseEntity<CreateEmployeeResponse> createEmployee(@Valid @RequestBody EmployeeRequest request) {
+        CreateEmployeeResponse response = employeeService.createEmployee(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     };
+
+
+    //GET path = http://localhost:8080/api/v1/employee/id
+    @GetMapping("/{id}")
+    public ResponseEntity<EmployeeDetailResponse> getEmployee(@PathVariable Long id) {
+        EmployeeDetailResponse response = employeeService.getEmployeeById(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public List<EmployeeSummaryResponse> getAllEmployees() {
+        return employeeService.getAllEmployees();
+    }
+
+    //PUT path = http://localhost:8080/api/v1/employee/update/id
+    @PutMapping("update/{id}")
+    public ResponseEntity<UpdateEmployeeResponse> updateEmployee(@PathVariable Long id, @Valid @RequestBody UpdateEmployeeRequest request) {
+        UpdateEmployeeResponse response = employeeService.updateEmployee(id, request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //DELETE path = http://localhost:8080/api/v1/employee/delete/id
+    @DeleteMapping("delete/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployee(id);
+    }
 }

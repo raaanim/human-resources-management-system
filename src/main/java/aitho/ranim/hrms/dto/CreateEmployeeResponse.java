@@ -1,8 +1,8 @@
 package aitho.ranim.hrms.dto;
 import java.time.LocalDate;
 
-public record EmployeeResponse(
+public record CreateEmployeeResponse(
          LocalDate dateOfCreation,
-         String result
+         String message
 ) {
 }

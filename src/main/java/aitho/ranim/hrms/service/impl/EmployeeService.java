@@ -1,12 +1,13 @@
 package aitho.ranim.hrms.service.impl;
 
+import aitho.ranim.hrms.dto.*;
 import aitho.ranim.hrms.dto.EmployeeRequest;
-import aitho.ranim.hrms.dto.EmployeeResponse;
 import aitho.ranim.hrms.entity.Employee;
 import aitho.ranim.hrms.exception.EmployeeException;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
 import aitho.ranim.hrms.service.IEmailService;
 import aitho.ranim.hrms.service.IEmployeeService;
+import aitho.ranim.hrms.utils.EmployeeUtils;
 import aitho.ranim.hrms.viewmodel.EmployeeViewModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,12 +29,9 @@ public class EmployeeService implements IEmployeeService {
     private final IEmailService emailService;
 
     @Override
-    public EmployeeResponse createEmployee(EmployeeRequest request) {
-        Employee employee  = new Employee();
-        employee.setFirstName(request.firstName());
-        employee.setLastName(request.lastName());
+    public CreateEmployeeResponse createEmployee(EmployeeRequest request) {
+        Employee employee = EmployeeUtils.createEmployeeFromRequest(request);
         employee.setPassword(passwordEncoder.encode(request.password()));
-        employee.setEmail(request.email());
         employee.setStatus("PENDING");
         employee.setActivationToken(UUID.randomUUID().toString());
 
@@ -40,11 +39,12 @@ public class EmployeeService implements IEmployeeService {
 
         String activationLink = "http://localhost:8080/employee/activate/" + savedEmployee.getActivationToken();
         emailService.sendActivationEmail(savedEmployee, activationLink);
-        return new EmployeeResponse(
+        return new CreateEmployeeResponse(
                 LocalDate.now(),
                 "Employee profile successfully created"
         );
     }
+
 
     public EmployeeViewModel activateEmployee(String token) {
         Employee employee = employeeRepository
@@ -58,5 +58,45 @@ public class EmployeeService implements IEmployeeService {
                 employee.getFirstName(),
                 employee.getLastName()
         );
+    }
+
+
+    @Override
+    public EmployeeDetailResponse getEmployeeById(Long id) {
+        Employee employee = employeeRepository
+                .findById(id)
+                .orElseThrow(() -> new EmployeeException("Employee not found", HttpStatus.NOT_FOUND, "/employee/" + id));
+        return EmployeeUtils.toEmployeeDetailResponse(employee);
+
+    }
+
+    @Override
+    public List<EmployeeSummaryResponse> getAllEmployees() {
+        List<Employee> employees = employeeRepository.findAll();
+        return employees.stream()
+                .map(EmployeeUtils::toEmployeeSummaryResponse)
+                .toList();
+    }
+
+
+    @Override
+    public UpdateEmployeeResponse updateEmployee(Long id, UpdateEmployeeRequest request) {
+        Employee employee = employeeRepository
+                .findById(id)
+                .orElseThrow(() -> new EmployeeException("Employee not found", HttpStatus.NOT_FOUND, "/employee/" + id));
+        EmployeeUtils.updateEmployeeFromRequest(employee, request);
+        employeeRepository.save(employee);
+        return new  UpdateEmployeeResponse(
+                LocalDate.now(),
+                "Employee successfully updated"
+        );
+    }
+
+    @Override
+    public void deleteEmployee(Long id) {
+        Employee employee = employeeRepository
+                .findById(id)
+                .orElseThrow(() -> new EmployeeException("Employee not found", HttpStatus.NOT_FOUND, "/employee/" + id));
+        employeeRepository.deleteById(id);
     }
 }
