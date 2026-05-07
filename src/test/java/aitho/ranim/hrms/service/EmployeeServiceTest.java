@@ -30,6 +30,8 @@ public class EmployeeServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private IEmailService emailService;
 
     @InjectMocks
     private EmployeeService employeeService;
