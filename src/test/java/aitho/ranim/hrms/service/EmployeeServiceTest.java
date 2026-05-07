@@ -143,23 +143,10 @@ public class EmployeeServiceTest {
                 .thenReturn(Optional.of(employee));
 
 
-        UpdateEmployeeRequest request =
-                new UpdateEmployeeRequest(
-                        "Johnny",
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-        );
+        UpdateEmployeeRequest request = UpdateEmployeeRequest.builder()
+                        .firstName("Johnny")
+                        .lastName("Doe")
+                        .build();
 
         UpdateEmployeeResponse response = employeeService.updateEmployee(1L, request);
         assertNotNull(response);

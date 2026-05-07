@@ -1,9 +1,11 @@
 package aitho.ranim.hrms.dto;
 
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 
 import java.time.LocalDate;
 
+@Builder
 public record UpdateEmployeeRequest(
         @Size(min = 1, max = 50, message = "First name must be between 1 and 50 characters")
         String firstName,
