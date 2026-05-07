@@ -3,8 +3,8 @@ package aitho.ranim.hrms.service;
 import aitho.ranim.hrms.dto.ActivateAccountRequest;
 import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.dto.UpdateEmployeeRequest;
+import aitho.ranim.hrms.dto.UpdateEmployeeResponse;
 import aitho.ranim.hrms.entity.Employee;
-import aitho.ranim.hrms.exception.EmployeeException;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
 import aitho.ranim.hrms.service.impl.EmployeeService;
 import org.junit.jupiter.api.Test;
@@ -136,33 +136,57 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    void testUpdateEmployee() {
-        Employee employee = new Employee();
-        UpdateEmployeeRequest request =
-                new UpdateEmployeeRequest(
-                        "John",
-                        "Doe",
-                        LocalDate.of(1990, 1, 1),
-                        "Male",
-                        "American",
-                        "johndoepersonal@email.com",
-                        "New York",
-                        "+1 212-345-6789",
-                        "350 5th Avenue, New York, NY 10118",
-                        "New York",
-                        "USA",
-                        "10118",
-                        "NY",
-                        "New York"
-        );
+    void testUpdateEmployee_ShouldNotOverwriteNullFields() {
+        Employee employee = getEmployee();
 
         when(employeeRepository.findById(1L))
                 .thenReturn(Optional.of(employee));
 
-        var response = employeeService.updateEmployee(1L, request);
 
+        UpdateEmployeeRequest request = UpdateEmployeeRequest.builder()
+                        .firstName("Johnny")
+                        .lastName("Doe")
+                        .build();
+
+        UpdateEmployeeResponse response = employeeService.updateEmployee(1L, request);
         assertNotNull(response);
+        assertEquals("Johnny", employee.getFirstName());
+        assertEquals("Doe", employee.getLastName());
+        assertEquals("Male", employee.getGender());
+        assertEquals("American", employee.getNationality());
+        assertEquals(LocalDate.of(1990, 1, 1), employee.getDateOfBirth());
+        assertEquals("johndoepersonal@email.com", employee.getPersonalEmail());
+        assertEquals("johndoe@email.com", employee.getEmail());
+        assertEquals("+1 212-345-6789", employee.getPhoneNumber());
+        assertEquals("New York", employee.getBirthPlace());
+        assertEquals("350 5th Avenue, New York, NY 10118", employee.getAddress());
+        assertEquals("New York", employee.getCity());
+        assertEquals("USA", employee.getCountry());
+        assertEquals("10118", employee.getPostalCode());
+        assertEquals("NY", employee.getProvince());
+        assertEquals("New York", employee.getWorkLocation());
         verify(employeeRepository).save(employee);
+    }
+
+    public static Employee getEmployee() {
+        Employee employee = new Employee();
+        employee.setId(1L);
+        employee.setFirstName("John");
+        employee.setLastName("Doe");
+        employee.setGender("Male");
+        employee.setNationality("American");
+        employee.setDateOfBirth(LocalDate.of(1990, 1, 1));
+        employee.setPersonalEmail("johndoepersonal@email.com");
+        employee.setEmail("johndoe@email.com");
+        employee.setPhoneNumber("+1 212-345-6789");
+        employee.setBirthPlace("New York");
+        employee.setAddress("350 5th Avenue, New York, NY 10118");
+        employee.setCity("New York");
+        employee.setCountry("USA");
+        employee.setPostalCode("10118");
+        employee.setProvince("NY");
+        employee.setWorkLocation("New York");
+        return employee;
     }
 
     @Test

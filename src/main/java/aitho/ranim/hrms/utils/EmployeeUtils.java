@@ -4,7 +4,6 @@ import aitho.ranim.hrms.dto.*;
 import aitho.ranim.hrms.entity.Employee;
 import lombok.experimental.UtilityClass;
 
-import java.util.UUID;
 
 @UtilityClass
 public class EmployeeUtils {
@@ -36,20 +35,48 @@ public class EmployeeUtils {
     }
 
     public void updateEmployeeFromRequest(Employee employee, UpdateEmployeeRequest newEmployee) {
-        employee.setFirstName(newEmployee.firstName());
-        employee.setLastName(newEmployee.lastName());
-        employee.setGender(newEmployee.gender());
-        employee.setDateOfBirth(newEmployee.dateOfBirth());
-        employee.setNationality(newEmployee.nationality());
-        employee.setBirthPlace(newEmployee.birthPlace());
-        employee.setPersonalEmail(newEmployee.personalEmail());
-        employee.setPhoneNumber(newEmployee.phoneNumber());
-        employee.setAddress(newEmployee.address());
-        employee.setCity(newEmployee.city());
-        employee.setCountry(newEmployee.country());
-        employee.setPostalCode(newEmployee.postalCode());
-        employee.setProvince(newEmployee.province());
-        employee.setWorkLocation(newEmployee.workLocation());
+        if (newEmployee.firstName() != null){
+            employee.setFirstName(newEmployee.firstName());
+        }
+        if (newEmployee.lastName() != null){
+            employee.setLastName(newEmployee.lastName());
+        }
+        if (newEmployee.gender() != null){
+            employee.setGender(newEmployee.gender());
+        }
+        if (newEmployee.dateOfBirth() != null){
+            employee.setDateOfBirth(newEmployee.dateOfBirth());
+        }
+        if (newEmployee.nationality() != null){
+            employee.setNationality(newEmployee.nationality());
+        }
+        if (newEmployee.personalEmail() != null){
+            employee.setPersonalEmail(newEmployee.personalEmail());
+        }
+        if (newEmployee.phoneNumber() != null){
+            employee.setPhoneNumber(newEmployee.phoneNumber());
+        }
+        if(newEmployee.birthPlace() != null){
+            employee.setBirthPlace(newEmployee.birthPlace());
+        }
+        if (newEmployee.address() != null){
+            employee.setAddress(newEmployee.address());
+        }
+        if (newEmployee.city() != null){
+            employee.setCity(newEmployee.city());
+        }
+        if (newEmployee.country() != null){
+            employee.setCountry(newEmployee.country());
+        }
+        if (newEmployee.postalCode() != null){
+            employee.setPostalCode(newEmployee.postalCode());
+        }
+        if (newEmployee.province() != null){
+            employee.setProvince(newEmployee.province());
+        }
+        if (newEmployee.workLocation() != null){
+            employee.setWorkLocation(newEmployee.workLocation());
+        }
     }
 
     public Employee createEmployeeFromRequest(EmployeeRequest request) {

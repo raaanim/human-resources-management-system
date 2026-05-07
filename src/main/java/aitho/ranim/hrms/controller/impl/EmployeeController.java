@@ -25,7 +25,7 @@ public class EmployeeController implements IEmployeeController {
     public ResponseEntity<CreateEmployeeResponse> createEmployee(@Valid @RequestBody EmployeeRequest request) {
         CreateEmployeeResponse response = employeeService.createEmployee(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
-    };
+    }
 
 
     //GET path = http://localhost:8080/api/v1/employee/id
@@ -40,8 +40,8 @@ public class EmployeeController implements IEmployeeController {
         return employeeService.getAllEmployees();
     }
 
-    //PUT path = http://localhost:8080/api/v1/employee/update/id
-    @PutMapping("update/{id}")
+    //PATCH path = http://localhost:8080/api/v1/employee/update/id
+    @PatchMapping ("update/{id}")
     public ResponseEntity<UpdateEmployeeResponse> updateEmployee(@PathVariable Long id, @Valid @RequestBody UpdateEmployeeRequest request) {
         UpdateEmployeeResponse response = employeeService.updateEmployee(id, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
