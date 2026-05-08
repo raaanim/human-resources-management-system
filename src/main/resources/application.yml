@@ -27,3 +27,7 @@ spring:
           starttls:
             enable: true
             required: true
+app:
+  jwt:
+    secret: ${JWT_SECRET:dGhpcyBpcyBhIHNlY3JldCBrZXkgZm9yIGp3dCB0b2tlbiBzaWduaW5n}
+    expiration-ms: 86400000 # Token expires after 24 hours
