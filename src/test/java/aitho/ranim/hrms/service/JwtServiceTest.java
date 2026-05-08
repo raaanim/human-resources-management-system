@@ -2,19 +2,28 @@ package aitho.ranim.hrms.service;
 
 
 import aitho.ranim.hrms.security.JwtService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.util.ReflectionTestUtils;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@SpringBootTest
 public class JwtServiceTest {
 
-    @Autowired
     private JwtService jwtService;
+
+    @BeforeEach
+    void setUp() {
+        jwtService = new JwtService();
+
+        ReflectionTestUtils.setField(jwtService, "secret",
+                "testsecretkeytestsecretkeytestsecretkey");
+
+        ReflectionTestUtils.setField(jwtService, "expirationMs",
+                86400000L);
+    }
 
     @Test
     public void givenValidUserDetails_whenGenerateToken_thenTokenIsNotNullAndNotEmpty(){
