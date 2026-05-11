@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class JwtServiceTest {
 
     private JwtService jwtService;
+    private UserDetails userDetails;
 
     @BeforeEach
     void setUp() {
@@ -23,24 +24,23 @@ public class JwtServiceTest {
 
         ReflectionTestUtils.setField(jwtService, "expirationMs",
                 86400000L);
+
+        userDetails = User
+                .withUsername("testUser")
+                .build();
     }
 
     @Test
-    public void givenValidUserDetails_whenGenerateToken_thenTokenIsNotNullAndNotEmpty(){
-        UserDetails userDetails = User
-                .withUsername("testUser")
-                .build();
+    public void givenValidUserDetails_whenGenerateToken_thenTokenIsNotNullAndNotEmpty(){;
 
         String token = jwtService.generateToken(userDetails);
+
         assertNotNull(token);
         assertFalse(token.isEmpty());
     }
 
     @Test
     public void givenGeneratedToken_whenExtractUsername_thenReturnsOriginalUsername() {
-        UserDetails userDetails = User
-                .withUsername("testUser")
-                .build();
 
         String token = jwtService.generateToken(userDetails);
 
@@ -51,9 +51,6 @@ public class JwtServiceTest {
 
     @Test
     public void givenGeneratedToken_whenValidated_thenIsValid() {
-        UserDetails userDetails = User
-                .withUsername("testUser")
-                .build();
 
         String token = jwtService.generateToken(userDetails);
 
