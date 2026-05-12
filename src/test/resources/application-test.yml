@@ -19,3 +19,8 @@ spring:
           auth: false
           starttls:
             enable: false
+
+app:
+  jwt:
+    secret: testsecretkeytestsecretkeytestsecretkey
+    expiration-ms: 86400000
