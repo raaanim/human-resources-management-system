@@ -21,15 +21,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController implements IAuthController {
 
     private final UserDetailsServiceImpl userDetailsService;
-    private AuthenticationManager authenticationManager;
-    private JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
-    public AuthController(UserDetailsServiceImpl userDetailsService) {
+    public AuthController(
+            UserDetailsServiceImpl userDetailsService,
+            AuthenticationManager authenticationManager,
+            JwtService jwtService
+    ) {
         this.userDetailsService = userDetailsService;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
     // POST path = http://localhost:8080/api/v1/auth/login
-    @PostMapping("login")
+    @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

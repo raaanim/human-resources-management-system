@@ -1,13 +1,11 @@
 package aitho.ranim.hrms.exception.handler;
 
-import aitho.ranim.hrms.exception.CustomErrorResponse;
-import aitho.ranim.hrms.exception.EmailCustomException;
-import aitho.ranim.hrms.exception.EmailErrorResponse;
-import aitho.ranim.hrms.exception.EmployeeException;
+import aitho.ranim.hrms.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -73,6 +71,19 @@ public class GlobalExceptionHandler {
 
         // Return a generic error response to the client
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(value = BadCredentialsException.class)
+    public ResponseEntity<LoginErrorResponse> handleException(BadCredentialsException e, HttpServletRequest request) {
+        log.error("A login error occurred: {}", e.getMessage());
+
+        LoginErrorResponse errorResponse = new LoginErrorResponse(
+                LocalDateTime.now().toString(),
+                HttpStatus.UNAUTHORIZED,
+                "Invalid credentials",
+                e.getCause() != null ? e.getCause().toString() : "Authentication failed"
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 }
 
