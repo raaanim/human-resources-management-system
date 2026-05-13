@@ -1,4 +1,5 @@
-package aitho.ranim.hrms.security;
+package aitho.ranim.hrms.service.security.impl;
+import aitho.ranim.hrms.service.security.IJwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -13,7 +14,7 @@ import java.util.Date;
 
 
 @Service
-public class JwtService {
+public class JwtService implements IJwtService {
 
     @Value("${app.jwt.secret}")
     private String secret;
