@@ -1,7 +1,7 @@
 package aitho.ranim.hrms.service;
 
 
-import aitho.ranim.hrms.security.JwtService;
+import aitho.ranim.hrms.service.security.impl.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.User;
