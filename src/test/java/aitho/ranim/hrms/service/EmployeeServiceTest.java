@@ -5,7 +5,10 @@ import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.dto.UpdateEmployeeRequest;
 import aitho.ranim.hrms.dto.UpdateEmployeeResponse;
 import aitho.ranim.hrms.entity.Employee;
+import aitho.ranim.hrms.entity.Role;
+import aitho.ranim.hrms.enums.RoleName;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
+import aitho.ranim.hrms.repository.IRoleRepository;
 import aitho.ranim.hrms.service.impl.EmployeeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +27,9 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class EmployeeServiceTest {
+    @Mock
+    private IRoleRepository  roleRepository;
+
     @Mock
     private IEmployeeRepository employeeRepository;
 
@@ -56,6 +62,13 @@ public class EmployeeServiceTest {
                 "NY",
                 "New York"
         );
+
+        Role role = new Role();
+        role.setName(RoleName.ROLE_EMPLOYEE);
+
+        when(roleRepository.findByName(RoleName.ROLE_EMPLOYEE))
+                .thenReturn(Optional.of(role));
+
         when(passwordEncoder.encode(anyString()))
                 .thenReturn("encodedPassword");
 
@@ -66,6 +79,7 @@ public class EmployeeServiceTest {
 
         assertNotNull(response);
 
+        verify(roleRepository, times(1)).findByName(RoleName.ROLE_EMPLOYEE);
         verify(passwordEncoder, times(1)).encode(anyString());
         verify(employeeRepository, times(1)).save(any(Employee.class));
     }
