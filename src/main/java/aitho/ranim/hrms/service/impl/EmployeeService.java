@@ -3,8 +3,11 @@ package aitho.ranim.hrms.service.impl;
 import aitho.ranim.hrms.dto.*;
 import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.entity.Employee;
+import aitho.ranim.hrms.entity.Role;
+import aitho.ranim.hrms.enums.RoleName;
 import aitho.ranim.hrms.exception.EmployeeException;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
+import aitho.ranim.hrms.repository.IRoleRepository;
 import aitho.ranim.hrms.service.IEmailService;
 import aitho.ranim.hrms.service.IEmployeeService;
 import aitho.ranim.hrms.utils.EmployeeUtils;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -24,6 +28,7 @@ import java.util.UUID;
 @Slf4j
 public class EmployeeService implements IEmployeeService {
 
+    private final IRoleRepository roleRepository;
     private final IEmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
     private final IEmailService emailService;
@@ -31,6 +36,9 @@ public class EmployeeService implements IEmployeeService {
     @Override
     public CreateEmployeeResponse createEmployee(EmployeeRequest request) {
         Employee employee = EmployeeUtils.createEmployeeFromRequest(request);
+        Role role = roleRepository.findByName(RoleName.ROLE_EMPLOYEE)
+                        .orElseThrow(() -> new EmployeeException("Default role not found", HttpStatus.INTERNAL_SERVER_ERROR, "/employee"));
+        employee.setRoles(Set.of(role));
         employee.setPassword(passwordEncoder.encode(request.password()));
         employee.setStatus("PENDING");
         employee.setActivationToken(UUID.randomUUID().toString());
