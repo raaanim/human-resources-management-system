@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-@Table(name = "roles")
+@Table(name = "role")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -18,4 +18,8 @@ public class Role {
     Long id;
     @Enumerated(EnumType.STRING)
     RoleName name;
+
+    public Role(RoleName name) {
+        this.name = name;
+    }
 }
