@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now().toString(),
                 e.getStatusCode(),
                 e.getMessage(),
-                e.getCause() != null ? e.getCause().toString() : "No additional error details",
+                e.getCause() != null ? e.getCause().getMessage() : "No additional error details",
                 request.getRequestURI()
         );
 
@@ -44,7 +45,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now().toString(),
                 e.getStatusCode(),
                 e.getMessage(),
-                e.getCause() != null ? e.getCause().toString() : "No additional error details"
+                e.getCause() != null ? e.getCause().toString() : "SMTP server error"
         );
         return ResponseEntity.status(e.getStatusCode()).body(errorResponse);
     }
@@ -65,7 +66,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now().toString(),
                 e.getStatusCode(),
                 message,
-                e.getCause() != null ? e.getCause().toString() : "Validation error",
+                e.getCause() != null ? e.getCause().getMessage() : "Validation error",
                 request.getRequestURI()
         );
 
@@ -74,16 +75,30 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = BadCredentialsException.class)
-    public ResponseEntity<LoginErrorResponse> handleException(BadCredentialsException e, HttpServletRequest request) {
+    public ResponseEntity<LoginErrorResponse> handleException(BadCredentialsException e, HttpServletRequest request ) {
         log.error("A login error occurred: {}", e.getMessage());
 
         LoginErrorResponse errorResponse = new LoginErrorResponse(
                 LocalDateTime.now().toString(),
                 HttpStatus.UNAUTHORIZED,
                 "Invalid credentials",
-                e.getCause() != null ? e.getCause().toString() : "Authentication failed"
+                e.getCause() != null ? e.getCause().getMessage() : "Authentication failed",
+                request.getRequestURI()
         );
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public ResponseEntity<AccessDeniedResponse> handleAccessDeniedException(AccessDeniedException e) {
+        log.error("Access denied occurred: {}", e.getMessage());
+
+        AccessDeniedResponse accessDeniedResponse = new AccessDeniedResponse(
+                LocalDateTime.now().toString(),
+                HttpStatus.FORBIDDEN,
+                "Access denied",
+                e.getCause() != null ? e.getCause().getMessage() : "You do not have permission to access this resource"
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(accessDeniedResponse);
     }
 }
 
