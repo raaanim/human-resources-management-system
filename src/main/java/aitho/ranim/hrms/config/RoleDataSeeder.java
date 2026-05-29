@@ -4,10 +4,12 @@ import aitho.ranim.hrms.entity.Role;
 import aitho.ranim.hrms.enums.RoleName;
 import aitho.ranim.hrms.repository.IRoleRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 
 @Component
+@Order(1)
 public class RoleDataSeeder implements CommandLineRunner {
 
     private final IRoleRepository roleRepository;

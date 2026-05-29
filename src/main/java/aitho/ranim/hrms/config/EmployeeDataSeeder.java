@@ -6,12 +6,14 @@ import aitho.ranim.hrms.enums.RoleName;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
 import aitho.ranim.hrms.repository.IRoleRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
 @Component
+@Order(2)
 public class EmployeeDataSeeder implements CommandLineRunner {
 
         private final IEmployeeRepository employeeRepository;
@@ -32,7 +34,7 @@ public class EmployeeDataSeeder implements CommandLineRunner {
             if (employeeRepository.findByEmail("admin@test.com").isEmpty()) {
 
                 Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
-                        .orElseThrow(() -> new RuntimeException("ROLE_ADMIN not found"));
+                        .orElseGet(() -> roleRepository.save(new Role(RoleName.ROLE_ADMIN)));
 
                 Employee admin = new Employee();
                 admin.setFirstName("Admin");
@@ -49,7 +51,7 @@ public class EmployeeDataSeeder implements CommandLineRunner {
             if (employeeRepository.findByEmail("hr@test.com").isEmpty()) {
 
                 Role hrRole = roleRepository.findByName(RoleName.ROLE_HR)
-                        .orElseThrow(() -> new RuntimeException("ROLE_ADMIN not found"));
+                        .orElseGet(() -> roleRepository.save(new Role(RoleName.ROLE_HR)));
 
                 Employee hr = new Employee();
                 hr.setFirstName("Hr");
