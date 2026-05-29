@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -27,6 +28,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Employee employee = employeeRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
+        if (Objects.equals(employee.getStatus(), "PENDING")) {
+            throw new UsernameNotFoundException("User account is pending activation: " + email);
+        }
         return User.withUsername(employee.getEmail())
                 .password(employee.getPassword())
                 .authorities(employee.getRoles().stream()

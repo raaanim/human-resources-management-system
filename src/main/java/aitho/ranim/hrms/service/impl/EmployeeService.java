@@ -36,12 +36,14 @@ public class EmployeeService implements IEmployeeService {
     @Override
     public CreateEmployeeResponse createEmployee(EmployeeRequest request) {
         Employee employee = EmployeeUtils.createEmployeeFromRequest(request);
-        Role role = roleRepository.findByName(RoleName.ROLE_EMPLOYEE)
-                        .orElseThrow(() -> new EmployeeException("Default role not found", HttpStatus.INTERNAL_SERVER_ERROR, "/employee"));
+
+        Role role = roleRepository.findByName(request.role())
+                .orElseThrow(() -> new EmployeeException("Role not found: " + request.role(), HttpStatus.BAD_REQUEST, "/employee"));
         employee.setRoles(Set.of(role));
         employee.setPassword(passwordEncoder.encode(request.password()));
         employee.setStatus("PENDING");
         employee.setActivationToken(UUID.randomUUID().toString());
+
 
         Employee savedEmployee = employeeRepository.save(employee);
 
