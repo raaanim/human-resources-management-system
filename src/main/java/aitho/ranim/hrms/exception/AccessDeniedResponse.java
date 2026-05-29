@@ -2,11 +2,10 @@ package aitho.ranim.hrms.exception;
 
 import org.springframework.http.HttpStatusCode;
 
-public record LoginErrorResponse(
+public record AccessDeniedResponse(
         String timestamp,
         HttpStatusCode status,
         String message,
-        String error,
-        String path
+        String error
 ) {
 }

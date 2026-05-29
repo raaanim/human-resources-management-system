@@ -6,12 +6,15 @@ import aitho.ranim.hrms.repository.IRoleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class RoleDataSeeder implements CommandLineRunner {
 
     private final IRoleRepository roleRepository;
+
     public RoleDataSeeder(IRoleRepository roleRepository) {
         this.roleRepository = roleRepository;
+
     }
 
     @Override
@@ -27,5 +30,5 @@ public class RoleDataSeeder implements CommandLineRunner {
         if (roleRepository.findByName(RoleName.ROLE_EMPLOYEE).isEmpty()) {
             roleRepository.save(new Role(RoleName.ROLE_EMPLOYEE));
         }
+        }
     }
-}

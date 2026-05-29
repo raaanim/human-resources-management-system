@@ -7,6 +7,7 @@ import aitho.ranim.hrms.service.IEmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class EmployeeController implements IEmployeeController {
     }
 
     //POST path = api/v1/employee
+    @PreAuthorize("hasAnyRole('ADMIN', 'HR')")
     @PostMapping
     public ResponseEntity<CreateEmployeeResponse> createEmployee(@Valid @RequestBody EmployeeRequest request) {
         CreateEmployeeResponse response = employeeService.createEmployee(request);
@@ -29,18 +31,22 @@ public class EmployeeController implements IEmployeeController {
 
 
     //GET path = http://localhost:8080/api/v1/employee/id
+    @PreAuthorize("hasAnyRole('ADMIN', 'HR') or (hasRole('EMPLOYEE') and @employeeSecurity.isEmployeeIdMatching(authentication, #id))")
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeDetailResponse> getEmployee(@PathVariable Long id) {
         EmployeeDetailResponse response = employeeService.getEmployeeById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'HR')")
     @GetMapping
     public List<EmployeeSummaryResponse> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
+
     //PATCH path = http://localhost:8080/api/v1/employee/update/id
+    @PreAuthorize("hasAnyRole('ADMIN', 'HR')")
     @PatchMapping ("update/{id}")
     public ResponseEntity<UpdateEmployeeResponse> updateEmployee(@PathVariable Long id, @Valid @RequestBody UpdateEmployeeRequest request) {
         UpdateEmployeeResponse response = employeeService.updateEmployee(id, request);
@@ -48,6 +54,7 @@ public class EmployeeController implements IEmployeeController {
     }
 
     //DELETE path = http://localhost:8080/api/v1/employee/delete/id
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEmployee(@PathVariable Long id) {
