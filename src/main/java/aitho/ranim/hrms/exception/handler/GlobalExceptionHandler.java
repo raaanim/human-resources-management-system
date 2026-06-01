@@ -9,9 +9,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-
-import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
@@ -88,18 +85,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
-    @ExceptionHandler(value = AccessDeniedException.class)
-    public ResponseEntity<AccessDeniedResponse> handleAccessDeniedException(AccessDeniedException e) {
-        log.error("Access denied occurred: {}", e.getMessage());
-
-        AccessDeniedResponse accessDeniedResponse = new AccessDeniedResponse(
-                LocalDateTime.now().toString(),
-                HttpStatus.FORBIDDEN,
-                "Access denied",
-                e.getCause() != null ? e.getCause().getMessage() : "You do not have permission to access this resource"
-        );
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(accessDeniedResponse);
-    }
 
     @ExceptionHandler(value = { ProjectException.class })
     public ResponseEntity<ProjectErrorResponse> handleProjectException(ProjectException e, HttpServletRequest request) {

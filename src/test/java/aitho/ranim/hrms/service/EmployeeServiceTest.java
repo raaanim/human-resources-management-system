@@ -60,13 +60,14 @@ public class EmployeeServiceTest {
                 "USA",
                 "10118",
                 "NY",
-                "New York"
+                "New York",
+                RoleName.ROLE_EMPLOYEE
         );
 
         Role role = new Role();
-        role.setName(RoleName.ROLE_EMPLOYEE);
+        role.setName(request.role());
 
-        when(roleRepository.findByName(RoleName.ROLE_EMPLOYEE))
+        when(roleRepository.findByName(request.role()))
                 .thenReturn(Optional.of(role));
 
         when(passwordEncoder.encode(anyString()))
@@ -79,7 +80,7 @@ public class EmployeeServiceTest {
 
         assertNotNull(response);
 
-        verify(roleRepository, times(1)).findByName(RoleName.ROLE_EMPLOYEE);
+        verify(roleRepository, times(1)).findByName(request.role());
         verify(passwordEncoder, times(1)).encode(anyString());
         verify(employeeRepository, times(1)).save(any(Employee.class));
     }

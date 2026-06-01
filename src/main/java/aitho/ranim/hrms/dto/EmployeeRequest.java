@@ -1,5 +1,6 @@
 package aitho.ranim.hrms.dto;
 
+import aitho.ranim.hrms.enums.RoleName;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
@@ -48,7 +49,9 @@ public record EmployeeRequest(
         @NotBlank
         String province,
         @NotBlank
-        String workLocation
+        String workLocation,
+        @NotBlank
+        RoleName role
 ) {
 
 }
