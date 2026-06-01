@@ -100,5 +100,21 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(accessDeniedResponse);
     }
+
+    @ExceptionHandler(value = { ProjectException.class })
+    public ResponseEntity<ProjectErrorResponse> handleProjectException(ProjectException e, HttpServletRequest request) {
+        log.error("Project error occurred: {}", e.getMessage());
+
+        ProjectErrorResponse projectErrorResponse = new ProjectErrorResponse(
+                LocalDateTime.now().toString(),
+                e.getStatusCode(),
+                e.getMessage(),
+                e.getCause() != null ? e.getCause().getMessage() : "No additional error details",
+                request.getRequestURI()
+        );
+
+        // Return a generic error response to the client
+        return ResponseEntity.status(e.getStatusCode()).body(projectErrorResponse);
+    }
 }
 
