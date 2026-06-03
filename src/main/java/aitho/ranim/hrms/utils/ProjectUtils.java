@@ -6,7 +6,6 @@ import aitho.ranim.hrms.dto.ProjectSummaryResponse;
 import aitho.ranim.hrms.dto.UpdateProjectRequest;
 import aitho.ranim.hrms.entity.Project;
 import lombok.experimental.UtilityClass;
-
 import java.time.LocalDate;
 
 @UtilityClass
@@ -21,7 +20,7 @@ public class ProjectUtils {
        project.setStatus(projectRequest.status());
        project.setEndDate(projectRequest.endDate());
        project.setBudget(projectRequest.budget());
-       project.setCreatedAt(java.time.LocalDate.now());
+       project.setCreatedAt(LocalDate.now());
        return project;
     }
 
@@ -54,9 +53,9 @@ public class ProjectUtils {
           if (newProject.clientName() != null){
             project.setClientName(newProject.clientName());    }
           if (newProject.startDate() != null){
-            project.setStartDate(LocalDate.parse(newProject.startDate()));    }
+            project.setStartDate(newProject.startDate());    }
           if (newProject.endDate() != null){
-              project.setEndDate(LocalDate.parse(newProject.endDate()));    }
+              project.setEndDate(newProject.endDate());    }
           if (newProject.budget() != null){
             project.setBudget(newProject.budget());    }
     }

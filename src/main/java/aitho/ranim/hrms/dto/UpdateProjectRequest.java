@@ -4,6 +4,7 @@ import aitho.ranim.hrms.enums.ProjectStatus;
 import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public record UpdateProjectRequest(
         @NotBlank(message = "Project name is required")
@@ -12,9 +13,9 @@ public record UpdateProjectRequest(
         @NotBlank(message = "Client name is required")
         String clientName,
         @NotBlank
-        String startDate,
+        LocalDate startDate,
         ProjectStatus status,
-        String endDate,
+        LocalDate endDate,
         BigDecimal budget
 ) {
 }
