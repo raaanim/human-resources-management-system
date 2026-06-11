@@ -1,12 +1,14 @@
 package aitho.ranim.hrms.repository;
 
 import aitho.ranim.hrms.entity.Project;
+import aitho.ranim.hrms.entity.ProjectAssignment;
 import aitho.ranim.hrms.enums.ProjectStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IProjectRepository extends JpaRepository<Project, Long> {
 

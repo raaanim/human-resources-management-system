@@ -67,7 +67,6 @@ public class GlobalExceptionHandler {
                 request.getRequestURI()
         );
 
-        // Return a generic error response to the client
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
@@ -98,8 +97,18 @@ public class GlobalExceptionHandler {
                 request.getRequestURI()
         );
 
-        // Return a generic error response to the client
         return ResponseEntity.status(e.getStatusCode()).body(projectErrorResponse);
     }
+    @ExceptionHandler(value =  ProjectAssignmentException.class)
+    public ResponseEntity<ProjectAssignmentErrorResponse> handleProjectAssignmentException(ProjectAssignmentException e, HttpServletRequest request) {
+        log.error("A project assignment error occurred: {}", e.getMessage());
+        ProjectAssignmentErrorResponse errorResponse = new ProjectAssignmentErrorResponse(
+                LocalDateTime.now().toString(),
+                e.getStatusCode(),
+                e.getMessage(),
+                e.getCause() != null ? e.getCause().getMessage() : "No additional error details",
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(e.getStatusCode()).body(errorResponse);
+    }
 }
-
