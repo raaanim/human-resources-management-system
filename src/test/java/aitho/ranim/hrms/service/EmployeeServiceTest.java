@@ -1,9 +1,6 @@
 package aitho.ranim.hrms.service;
 
-import aitho.ranim.hrms.dto.ActivateAccountRequest;
-import aitho.ranim.hrms.dto.EmployeeRequest;
-import aitho.ranim.hrms.dto.UpdateEmployeeRequest;
-import aitho.ranim.hrms.dto.UpdateEmployeeResponse;
+import aitho.ranim.hrms.dto.*;
 import aitho.ranim.hrms.entity.Employee;
 import aitho.ranim.hrms.entity.Role;
 import aitho.ranim.hrms.enums.RoleName;
@@ -15,15 +12,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 public class EmployeeServiceTest {
@@ -141,13 +141,23 @@ public class EmployeeServiceTest {
 
     @Test
     void testGetAllEmployees() {
-        when(employeeRepository.findAll())
-                .thenReturn(List.of(new Employee(), new Employee()));
 
-        var result = employeeService.getAllEmployees();
+        Pageable pageable = PageRequest.of(0, 10);
 
-        assertEquals(2, result.size());
-        verify(employeeRepository).findAll();
+        Employee e1 = new Employee();
+        Employee e2 = new Employee();
+
+        Page<Employee> page = new PageImpl<>(List.of(e1, e2));
+
+        when(employeeRepository.findAll(pageable))
+                .thenReturn(page);
+
+        Page<EmployeeSummaryResponse> result =
+                employeeService.getAllEmployees(pageable);
+
+        assertEquals(2, result.getContent().size());
+
+        verify(employeeRepository).findAll(pageable);
     }
 
     @Test

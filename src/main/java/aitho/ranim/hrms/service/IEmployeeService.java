@@ -3,14 +3,16 @@ package aitho.ranim.hrms.service;
 import aitho.ranim.hrms.dto.*;
 import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.viewmodel.EmployeeViewModel;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 public interface IEmployeeService {
     CreateEmployeeResponse createEmployee(EmployeeRequest request);
 
     EmployeeDetailResponse getEmployeeById(Long id);
 
-    List<EmployeeSummaryResponse> getAllEmployees();
+    Page<EmployeeSummaryResponse> getAllEmployees(Pageable pageable);
 
     UpdateEmployeeResponse updateEmployee(Long id, UpdateEmployeeRequest request);
 

@@ -4,7 +4,6 @@ import aitho.ranim.hrms.dto.*;
 import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.entity.Employee;
 import aitho.ranim.hrms.entity.Role;
-import aitho.ranim.hrms.enums.RoleName;
 import aitho.ranim.hrms.exception.EmployeeException;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
 import aitho.ranim.hrms.repository.IRoleRepository;
@@ -14,12 +13,13 @@ import aitho.ranim.hrms.utils.EmployeeUtils;
 import aitho.ranim.hrms.viewmodel.EmployeeViewModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -81,11 +81,9 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public List<EmployeeSummaryResponse> getAllEmployees() {
-        List<Employee> employees = employeeRepository.findAll();
-        return employees.stream()
-                .map(EmployeeUtils::toEmployeeSummaryResponse)
-                .toList();
+    public Page<EmployeeSummaryResponse> getAllEmployees(Pageable pageable) {
+        return employeeRepository.findAll(pageable)
+                .map(EmployeeUtils::toEmployeeSummaryResponse);
     }
 
 
