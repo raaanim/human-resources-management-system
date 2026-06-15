@@ -5,12 +5,15 @@ import aitho.ranim.hrms.dto.*;
 import aitho.ranim.hrms.dto.EmployeeRequest;
 import aitho.ranim.hrms.service.IEmployeeService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1/employee")
@@ -21,7 +24,7 @@ public class EmployeeController implements IEmployeeController {
         this.employeeService = employeeService;
     }
 
-    //POST path = api/v1/employee
+    //POST path = http://localhost:8080/api/v1/employee
     @PreAuthorize("hasAnyRole('ADMIN', 'HR')")
     @PostMapping
     public ResponseEntity<CreateEmployeeResponse> createEmployee(@Valid @RequestBody EmployeeRequest request) {
@@ -40,8 +43,15 @@ public class EmployeeController implements IEmployeeController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'HR')")
     @GetMapping
-    public List<EmployeeSummaryResponse> getAllEmployees() {
-        return employeeService.getAllEmployees();
+    public ResponseEntity<Page<EmployeeSummaryResponse>> getAllEmployees(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return ResponseEntity.ok(
+                employeeService.getAllEmployees(pageable)
+        );
     }
 
 
