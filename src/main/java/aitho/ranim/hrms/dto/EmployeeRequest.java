@@ -50,7 +50,6 @@ public record EmployeeRequest(
         String province,
         @NotBlank
         String workLocation,
-        @NotBlank
         RoleName role
 ) {
 
