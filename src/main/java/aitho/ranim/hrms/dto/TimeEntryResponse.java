@@ -1,8 +1,5 @@
 package aitho.ranim.hrms.dto;
 
-import aitho.ranim.hrms.entity.Employee;
-import aitho.ranim.hrms.entity.Project;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
