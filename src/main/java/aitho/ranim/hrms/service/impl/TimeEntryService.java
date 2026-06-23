@@ -1,6 +1,4 @@
 package aitho.ranim.hrms.service.impl;
-
-
 import aitho.ranim.hrms.dto.ProjectHoursReportResponse;
 import aitho.ranim.hrms.dto.TimeEntryRequest;
 import aitho.ranim.hrms.dto.TimeEntryResponse;
@@ -162,4 +160,3 @@ public class TimeEntryService implements ITimeEntryService {
             timeEntryRepository.delete(entry);
         }
     }
-
