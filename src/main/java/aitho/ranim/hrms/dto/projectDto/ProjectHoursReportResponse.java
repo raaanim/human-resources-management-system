@@ -1,4 +1,6 @@
-package aitho.ranim.hrms.dto;
+package aitho.ranim.hrms.dto.projectDto;
+
+import aitho.ranim.hrms.dto.timeEntryDto.TimeEntryResponse;
 
 import java.math.BigDecimal;
 import java.util.List;

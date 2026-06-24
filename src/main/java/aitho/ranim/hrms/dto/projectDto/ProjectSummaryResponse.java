@@ -1,4 +1,4 @@
-package aitho.ranim.hrms.dto;
+package aitho.ranim.hrms.dto.projectDto;
 
 import aitho.ranim.hrms.enums.ProjectStatus;
 

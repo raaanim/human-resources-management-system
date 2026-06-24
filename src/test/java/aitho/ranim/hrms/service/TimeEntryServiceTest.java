@@ -1,11 +1,10 @@
 package aitho.ranim.hrms.service;
 
-import aitho.ranim.hrms.dto.ProjectHoursReportResponse;
-import aitho.ranim.hrms.dto.TimeEntryRequest;
-import aitho.ranim.hrms.dto.TimeEntryResponse;
+import aitho.ranim.hrms.dto.projectDto.ProjectHoursReportResponse;
+import aitho.ranim.hrms.dto.timeEntryDto.TimeEntryRequest;
+import aitho.ranim.hrms.dto.timeEntryDto.TimeEntryResponse;
 import aitho.ranim.hrms.entity.Employee;
 import aitho.ranim.hrms.entity.Project;
-import aitho.ranim.hrms.entity.Role;
 import aitho.ranim.hrms.entity.TimeEntry;
 import aitho.ranim.hrms.enums.RoleName;
 import aitho.ranim.hrms.exception.ProjectAssignmentException;
@@ -23,7 +22,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,11 +30,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static aitho.ranim.hrms.enums.RoleName.ROLE_ADMIN;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

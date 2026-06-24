@@ -1,4 +1,4 @@
-package aitho.ranim.hrms.dto;
+package aitho.ranim.hrms.dto.timeEntryDto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

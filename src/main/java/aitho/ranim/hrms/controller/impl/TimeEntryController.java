@@ -1,9 +1,9 @@
 package aitho.ranim.hrms.controller.impl;
 
 import aitho.ranim.hrms.controller.ITimeEntryController;
-import aitho.ranim.hrms.dto.ProjectHoursReportResponse;
-import aitho.ranim.hrms.dto.TimeEntryRequest;
-import aitho.ranim.hrms.dto.TimeEntryResponse;
+import aitho.ranim.hrms.dto.projectDto.ProjectHoursReportResponse;
+import aitho.ranim.hrms.dto.timeEntryDto.TimeEntryRequest;
+import aitho.ranim.hrms.dto.timeEntryDto.TimeEntryResponse;
 import aitho.ranim.hrms.service.impl.TimeEntryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

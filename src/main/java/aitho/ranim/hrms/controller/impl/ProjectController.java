@@ -1,7 +1,7 @@
 package aitho.ranim.hrms.controller.impl;
 
 import aitho.ranim.hrms.controller.IProjectController;
-import aitho.ranim.hrms.dto.*;
+import aitho.ranim.hrms.dto.projectDto.*;
 import aitho.ranim.hrms.enums.ProjectStatus;
 import aitho.ranim.hrms.service.IProjectService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -70,7 +70,7 @@ public class ProjectController implements IProjectController {
     @PatchMapping("update/{id}")
     @Operation(summary = "Update Project by ID", description = "Endpoint to update project details by ID. Accessible by ADMIN and HR roles.")
     @ApiResponse(responseCode = "200", description = "Project updated successfully")
-    public ResponseEntity<UpdateProjectResponse> updateProjectById(@Valid @RequestBody UpdateProjectRequest projectRequest,  @PathVariable Long id) {
+    public ResponseEntity<UpdateProjectResponse> updateProjectById(@Valid @RequestBody UpdateProjectRequest projectRequest, @PathVariable Long id) {
     UpdateProjectResponse response = projectService.updateProject(id, projectRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

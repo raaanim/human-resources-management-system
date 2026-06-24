@@ -1,9 +1,9 @@
 package aitho.ranim.hrms.controller;
 
-import aitho.ranim.hrms.dto.AssignEmployeeRequest;
-import aitho.ranim.hrms.dto.EmployeeProjectAssignmentResponse;
-import aitho.ranim.hrms.dto.ProjectAssignmentResponse;
-import aitho.ranim.hrms.dto.ProjectEmployeeAssignmentResponse;
+import aitho.ranim.hrms.dto.employeeDto.AssignEmployeeRequest;
+import aitho.ranim.hrms.dto.projectAssignmentDto.EmployeeProjectAssignmentResponse;
+import aitho.ranim.hrms.dto.projectAssignmentDto.ProjectAssignmentResponse;
+import aitho.ranim.hrms.dto.projectAssignmentDto.ProjectEmployeeAssignmentResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

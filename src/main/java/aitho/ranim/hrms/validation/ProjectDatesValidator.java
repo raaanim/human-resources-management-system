@@ -1,6 +1,6 @@
 package aitho.ranim.hrms.validation;
 
-import aitho.ranim.hrms.dto.ProjectRequest;
+import aitho.ranim.hrms.dto.projectDto.ProjectRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
