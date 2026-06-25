@@ -1,4 +1,4 @@
-package aitho.ranim.hrms.dto;
+package aitho.ranim.hrms.dto.timeEntryDto;
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;

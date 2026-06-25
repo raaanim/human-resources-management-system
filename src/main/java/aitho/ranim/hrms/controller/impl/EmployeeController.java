@@ -1,8 +1,7 @@
 package aitho.ranim.hrms.controller.impl;
 
 import aitho.ranim.hrms.controller.IEmployeeController;
-import aitho.ranim.hrms.dto.*;
-import aitho.ranim.hrms.dto.EmployeeRequest;
+import aitho.ranim.hrms.dto.employeeDto.*;
 import aitho.ranim.hrms.service.IEmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;

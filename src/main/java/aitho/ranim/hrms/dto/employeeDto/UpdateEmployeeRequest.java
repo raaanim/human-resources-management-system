@@ -1,4 +1,4 @@
-package aitho.ranim.hrms.dto;
+package aitho.ranim.hrms.dto.employeeDto;
 
 import jakarta.validation.constraints.*;
 import lombok.Builder;

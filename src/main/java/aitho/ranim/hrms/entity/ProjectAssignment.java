@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Table(name = "project-assignment")
+@Table(name = "project_assignment")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
