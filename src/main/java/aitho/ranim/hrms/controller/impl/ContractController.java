@@ -5,8 +5,6 @@ import aitho.ranim.hrms.dto.contractDto.ContractRequest;
 import aitho.ranim.hrms.dto.contractDto.ContractResponse;
 import aitho.ranim.hrms.dto.contractDto.ContractSummaryResponse;
 import aitho.ranim.hrms.service.IContractService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
