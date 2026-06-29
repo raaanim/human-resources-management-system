@@ -1,9 +1,9 @@
 package aitho.ranim.hrms.utils;
 
-import aitho.ranim.hrms.dto.ProjectRequest;
-import aitho.ranim.hrms.dto.ProjectResponse;
-import aitho.ranim.hrms.dto.ProjectSummaryResponse;
-import aitho.ranim.hrms.dto.UpdateProjectRequest;
+import aitho.ranim.hrms.dto.projectDto.ProjectRequest;
+import aitho.ranim.hrms.dto.projectDto.ProjectResponse;
+import aitho.ranim.hrms.dto.projectDto.ProjectSummaryResponse;
+import aitho.ranim.hrms.dto.projectDto.UpdateProjectRequest;
 import aitho.ranim.hrms.entity.Project;
 import lombok.experimental.UtilityClass;
 import java.time.LocalDate;

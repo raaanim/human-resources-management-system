@@ -120,4 +120,17 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(e.getStatusCode()).body(errorResponse);
     }
+
+    @ExceptionHandler(value =  ContractException.class)
+    public ResponseEntity<ContractErrorResponse> handleContractException(ContractException e, HttpServletRequest request) {
+        log.error("A contract error occurred: {}", e.getMessage());
+        ContractErrorResponse contractErrorResponse = new ContractErrorResponse(
+                LocalDateTime.now().toString(),
+                e.getStatusCode(),
+                e.getMessage(),
+                e.getCause() != null ? e.getCause().getMessage() : "No additional error details",
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(e.getStatusCode()).body(contractErrorResponse);
+    }
 }
