@@ -35,7 +35,7 @@ public class ContractController implements IContractController {
     @PreAuthorize("hasAnyRole('ADMIN', 'HR', 'EMPLOYEE')")
     @GetMapping("/employee/{employeeId}")
     public ResponseEntity<List<ContractSummaryResponse>> getContractHistory(@PathVariable long employeeId) {
-        List<ContractSummaryResponse> response = contractService.getEmployeeContractsDetails(employeeId);
+        List<ContractSummaryResponse> response = contractService.getEmployeeContractDetails(employeeId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -60,6 +60,6 @@ public class ContractController implements IContractController {
     @PutMapping("/activate/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void activateContract(@PathVariable long id){
-        contractService.activateContractAndDisableOthers(id);
+        contractService.activateContract(id);
     }
 }

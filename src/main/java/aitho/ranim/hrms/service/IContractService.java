@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface IContractService {
     ContractResponse createContract(ContractRequest contractRequest);
-    List<ContractSummaryResponse> getEmployeeContractsDetails(Long employeeId);
+    List<ContractSummaryResponse> getEmployeeContractDetails(Long employeeId);
     ContractResponse getActiveContract(Long employeeId);
     ContractResponse updateContract(ContractRequest contractRequest, Long id);
-    void activateContractAndDisableOthers(Long id);
+    void activateContract(Long id);
     void checkAccess(Long employeeId);
 }

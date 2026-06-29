@@ -1,5 +1,4 @@
 package aitho.ranim.hrms.dto.contractDto;
-import aitho.ranim.hrms.dto.employeeDto.EmployeeDetailResponse;
 import aitho.ranim.hrms.entity.Employee;
 import aitho.ranim.hrms.enums.ContractType;
 import io.swagger.v3.oas.annotations.media.Schema;

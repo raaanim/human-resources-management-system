@@ -4,8 +4,10 @@ import aitho.ranim.hrms.dto.contractDto.ContractRequest;
 import aitho.ranim.hrms.dto.contractDto.ContractResponse;
 import aitho.ranim.hrms.dto.contractDto.ContractSummaryResponse;
 import aitho.ranim.hrms.entity.Contract;
+import aitho.ranim.hrms.entity.Employee;
 import aitho.ranim.hrms.exception.AccessDeniedException;
 import aitho.ranim.hrms.exception.ContractException;
+import aitho.ranim.hrms.exception.EmployeeException;
 import aitho.ranim.hrms.repository.IContractRepository;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
 import aitho.ranim.hrms.service.IContractService;
@@ -17,7 +19,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 
@@ -29,13 +30,17 @@ public class ContractService implements IContractService {
     private final IEmployeeRepository employeeRepository;
 
    public ContractResponse createContract(ContractRequest contractRequest) {
+       Long employeeId = contractRequest.employee().getId();
+       Employee employee = employeeRepository.findById(employeeId)
+               .orElseThrow(()-> new EmployeeException("Employee not found", HttpStatus.NOT_FOUND, "/employees/" + employeeId));
         Contract contract = ContractUtils.createContract(contractRequest);
-        contractRepository.save(contract);
-        return ContractUtils.getContractDetails(contract);
+        contract.setEmployee(employee);
+       Contract savedContract = contractRepository.save(contract);
+        return ContractUtils.getContractDetails(savedContract);
     }
 
     @Transactional(readOnly = true)
-    public List<ContractSummaryResponse> getEmployeeContractsDetails(Long employeeId) {
+    public List<ContractSummaryResponse> getEmployeeContractDetails(Long employeeId) {
         checkAccess(employeeId);
 
         return contractRepository.findByEmployeeIdOrderByStartDateDesc(employeeId)
@@ -64,7 +69,7 @@ public class ContractService implements IContractService {
     }
 
     @Transactional
-    public void activateContractAndDisableOthers(Long id) {
+    public void activateContract(Long id) {
 
             Contract contract = contractRepository.findById(id)
                     .orElseThrow(() -> new ContractException("Contract not found", HttpStatus.NOT_FOUND, "/contract/" + id));
@@ -73,10 +78,15 @@ public class ContractService implements IContractService {
 
             contractRepository.deactivateByEmployeeId(employeeId);
             contract.setActive(true);
+            contractRepository.save(contract);
    }
 
     public void checkAccess(Long employeeId){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null || auth.getAuthorities() == null) {
+            throw new AccessDeniedException("Access denied", HttpStatus.FORBIDDEN);
+        }
 
         boolean isAdminOrHr = auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")

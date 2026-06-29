@@ -11,7 +11,6 @@ import java.util.Optional;
 public interface IContractRepository extends JpaRepository<Contract, Long> {
     List<Contract> findByEmployeeIdOrderByStartDateDesc(Long employeeId);
     Optional<Contract> findFirstByEmployeeIdAndActiveTrue(Long employeeId);
-    List<Contract> findByEmployeeIdAndActiveTrue(Long employeeId);
 
     @Modifying
     @Query("""

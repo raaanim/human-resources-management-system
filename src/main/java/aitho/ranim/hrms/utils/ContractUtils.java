@@ -13,7 +13,6 @@ import java.time.LocalDate;
 public class ContractUtils {
     public Contract createContract(ContractRequest contractRequest) {
         Contract contract = new Contract();
-        contract.setEmployee(contractRequest.employee());
         contract.setStartDate(contractRequest.startDate());
         contract.setEndDate(contractRequest.endDate());
         contract.setContractType(contractRequest.contractType());
@@ -21,6 +20,8 @@ public class ContractUtils {
         contract.setDepartment(contractRequest.department());
         contract.setGrossAnnualSalary(contractRequest.grossAnnualSalary());
         contract.setMonthlyLeaveDays(contractRequest.monthlyLeaveDays());
+        contract.setMonthlyLeaveHours(contractRequest.monthlyLeaveHours());
+        contract.setNotes(contractRequest.notes());
         return contract;
     }
 
