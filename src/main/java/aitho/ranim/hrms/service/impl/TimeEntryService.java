@@ -1,7 +1,7 @@
 package aitho.ranim.hrms.service.impl;
-import aitho.ranim.hrms.dto.ProjectHoursReportResponse;
-import aitho.ranim.hrms.dto.TimeEntryRequest;
-import aitho.ranim.hrms.dto.TimeEntryResponse;
+import aitho.ranim.hrms.dto.projectDto.ProjectHoursReportResponse;
+import aitho.ranim.hrms.dto.timeEntryDto.TimeEntryRequest;
+import aitho.ranim.hrms.dto.timeEntryDto.TimeEntryResponse;
 import aitho.ranim.hrms.entity.Employee;
 import aitho.ranim.hrms.entity.Project;
 import aitho.ranim.hrms.entity.TimeEntry;

@@ -1,7 +1,6 @@
 package aitho.ranim.hrms.service;
 
-import aitho.ranim.hrms.dto.*;
-import aitho.ranim.hrms.dto.EmployeeRequest;
+import aitho.ranim.hrms.dto.employeeDto.*;
 import aitho.ranim.hrms.viewmodel.EmployeeViewModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,9 +1,9 @@
 package aitho.ranim.hrms.controller.impl;
 
 import aitho.ranim.hrms.controller.ITimeEntryController;
-import aitho.ranim.hrms.dto.ProjectHoursReportResponse;
-import aitho.ranim.hrms.dto.TimeEntryRequest;
-import aitho.ranim.hrms.dto.TimeEntryResponse;
+import aitho.ranim.hrms.dto.projectDto.ProjectHoursReportResponse;
+import aitho.ranim.hrms.dto.timeEntryDto.TimeEntryRequest;
+import aitho.ranim.hrms.dto.timeEntryDto.TimeEntryResponse;
 import aitho.ranim.hrms.service.impl.TimeEntryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,7 @@ public class TimeEntryController implements ITimeEntryController {
     // GET http://localhost:8080/api/v1/time-entry/my_entries
     @PreAuthorize("hasAnyRole('ADMIN', 'HR', 'EMPLOYEE')")
     @GetMapping("/my_entries")
-        public ResponseEntity<List<TimeEntryResponse>> getMyEntries(@RequestParam String month) {
+    public ResponseEntity<List<TimeEntryResponse>> getMyEntries(@RequestParam String month) {
         List<TimeEntryResponse> responses = timeEntryService.getMyEntries(month);
         return ResponseEntity.ok(responses);
     }
@@ -48,6 +48,7 @@ public class TimeEntryController implements ITimeEntryController {
     // DELETE http://localhost:8080/api/v1/time-entry/{id}
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEntry(@PathVariable Long id) {
         timeEntryService.deleteEntry(id);
     }

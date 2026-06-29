@@ -1,4 +1,4 @@
-package aitho.ranim.hrms.dto;
+package aitho.ranim.hrms.dto.employeeDto;
 
 import aitho.ranim.hrms.enums.RoleName;
 import jakarta.validation.constraints.*;
