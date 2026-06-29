@@ -1,4 +1,5 @@
 package aitho.ranim.hrms.service.impl;
+import aitho.ranim.hrms.entity.Contract;
 import aitho.ranim.hrms.entity.Employee;
 import aitho.ranim.hrms.exception.EmailCustomException;
 import aitho.ranim.hrms.service.IEmailService;
@@ -10,6 +11,9 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
+
+import java.time.LocalDate;
+import java.util.List;
 
 
 @Service
@@ -57,6 +61,20 @@ public class EmailService implements IEmailService {
             log.error("Failed sending email to {}", employee.getEmail(), e);
             throw new EmailCustomException("Failed to send email: ", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    public void sendContractExpiryEmail(String to,
+                                        List<Contract> contracts,
+                                        LocalDate startDate,
+                                        LocalDate endDate) {
+
+        Context context = new Context();
+        context.setVariable("contracts", contracts);
+        context.setVariable("startDate", startDate);
+        context.setVariable("endDate", endDate);
+
+        String html = templateEngine.process("contract-expiry-alert", context);
+
+        sendHtml(to, "Contracts expiring in the next 30 days", html);
     }
 
     private void sendHtml(String to, String subject, String html) {

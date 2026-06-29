@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Expiring contracts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<h2>Contratti in scadenza entro 30 giorni</h2>
+
+<p>Di seguito l'elenco dei contratti in scadenza.</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Nome dipendente</th>
+        <th>Tipo contratto</th>
+        <th>Posizione</th>
+        <th>Data di scadenza</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="contract : ${contracts}">
+        <td th:text="${contract.employee.firstName + ' ' + contract.employee.lastName}">Mario Rossi</td>
+        <td th:text="${contract.contractType}">Tempo determinato</td>
+        <td th:text="${contract.position}">Developer</td>
+        <td th:text="${contract.endDate}">2026-07-14</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
