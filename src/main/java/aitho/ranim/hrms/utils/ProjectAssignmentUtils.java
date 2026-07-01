@@ -1,8 +1,8 @@
 package aitho.ranim.hrms.utils;
 
-import aitho.ranim.hrms.dto.EmployeeProjectAssignmentResponse;
-import aitho.ranim.hrms.dto.ProjectAssignmentResponse;
-import aitho.ranim.hrms.dto.ProjectEmployeeAssignmentResponse;
+import aitho.ranim.hrms.dto.projectAssignmentDto.EmployeeProjectAssignmentResponse;
+import aitho.ranim.hrms.dto.projectAssignmentDto.ProjectAssignmentResponse;
+import aitho.ranim.hrms.dto.projectAssignmentDto.ProjectEmployeeAssignmentResponse;
 import aitho.ranim.hrms.entity.ProjectAssignment;
 import lombok.experimental.UtilityClass;
 

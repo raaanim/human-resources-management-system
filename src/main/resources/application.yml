@@ -31,5 +31,10 @@ app:
   jwt:
     secret: ${JWT_SECRET:dGhpcyBpcyBhIHNlY3JldCBrZXkgZm9yIGp3dCB0b2tlbiBzaWduaW5n}
     expiration-ms: 86400000 # Token expires after 24 hours
-
-kind: Application
+  hr:
+    notification-email: "hr@azienda.it"
+  scheduler:
+    contract-expiry-cron: "0 0 8 * * *"
+leave:
+  accrual:
+    cron: "0 0 6 1 * *"

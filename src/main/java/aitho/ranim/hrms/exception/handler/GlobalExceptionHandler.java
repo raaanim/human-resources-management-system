@@ -120,4 +120,34 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(e.getStatusCode()).body(errorResponse);
     }
+
+    @ExceptionHandler(value =  ContractException.class)
+    public ResponseEntity<ContractErrorResponse> handleContractException(ContractException e, HttpServletRequest request) {
+        log.error("A contract error occurred: {}", e.getMessage());
+        ContractErrorResponse contractErrorResponse = new ContractErrorResponse(
+                LocalDateTime.now().toString(),
+                e.getStatusCode(),
+                e.getMessage(),
+                e.getCause() != null ? e.getCause().getMessage() : "No additional error details",
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(e.getStatusCode()).body(contractErrorResponse);
+    }
+    @ExceptionHandler(value = LeaveAccrualException.class)
+    public ResponseEntity<CustomErrorResponse> handleLeaveAccrualException(
+            LeaveAccrualException e,
+            HttpServletRequest request
+    ) {
+        log.error("Leave accrual error: {}", e.getMessage());
+
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now().toString(),
+                HttpStatus.BAD_REQUEST,
+                e.getMessage(),
+                "Leave accrual processing error",
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 }

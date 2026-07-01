@@ -1,6 +1,6 @@
 package aitho.ranim.hrms.service;
 
-import aitho.ranim.hrms.dto.*;
+import aitho.ranim.hrms.dto.employeeDto.*;
 import aitho.ranim.hrms.entity.Employee;
 import aitho.ranim.hrms.entity.Role;
 import aitho.ranim.hrms.enums.RoleName;

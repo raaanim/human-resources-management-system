@@ -1,7 +1,7 @@
 package aitho.ranim.hrms.service;
 
-import aitho.ranim.hrms.dto.AssignEmployeeRequest;
-import aitho.ranim.hrms.dto.ProjectAssignmentResponse;
+import aitho.ranim.hrms.dto.employeeDto.AssignEmployeeRequest;
+import aitho.ranim.hrms.dto.projectAssignmentDto.ProjectAssignmentResponse;
 import aitho.ranim.hrms.entity.Employee;
 import aitho.ranim.hrms.entity.Project;
 import aitho.ranim.hrms.entity.ProjectAssignment;

@@ -1,7 +1,6 @@
 package aitho.ranim.hrms.service.impl;
 
-import aitho.ranim.hrms.dto.*;
-import aitho.ranim.hrms.dto.EmployeeRequest;
+import aitho.ranim.hrms.dto.employeeDto.*;
 import aitho.ranim.hrms.entity.Employee;
 import aitho.ranim.hrms.entity.Role;
 import aitho.ranim.hrms.exception.EmployeeException;

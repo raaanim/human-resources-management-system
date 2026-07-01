@@ -1,7 +1,7 @@
 package aitho.ranim.hrms.controller.impl;
 
 import aitho.ranim.hrms.controller.IProjectController;
-import aitho.ranim.hrms.dto.*;
+import aitho.ranim.hrms.dto.projectDto.*;
 import aitho.ranim.hrms.enums.ProjectStatus;
 import aitho.ranim.hrms.service.IProjectService;
 import jakarta.validation.Valid;
@@ -58,7 +58,7 @@ public class ProjectController implements IProjectController {
     //PATCH path = http://localhost:8080/api/v1/project/update/id
     @PreAuthorize("hasAnyRole('ADMIN', 'HR')")
     @PatchMapping("update/{id}")
-    public ResponseEntity<UpdateProjectResponse> updateProjectById(@Valid @RequestBody UpdateProjectRequest projectRequest,  @PathVariable Long id) {
+    public ResponseEntity<UpdateProjectResponse> updateProjectById(@Valid @RequestBody UpdateProjectRequest projectRequest, @PathVariable Long id) {
     UpdateProjectResponse response = projectService.updateProject(id, projectRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

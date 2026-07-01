@@ -1,6 +1,6 @@
 package aitho.ranim.hrms.service;
 
-import aitho.ranim.hrms.dto.*;
+import aitho.ranim.hrms.dto.projectDto.*;
 import aitho.ranim.hrms.enums.ProjectStatus;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
