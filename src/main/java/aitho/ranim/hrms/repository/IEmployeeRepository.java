@@ -3,12 +3,14 @@ package aitho.ranim.hrms.repository;
 import aitho.ranim.hrms.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
     Optional<Employee> findByActivationToken(String token);
-
     Optional<Employee> findByEmail(String email);
+    List<Employee> findByStatus(String status);
 
 }
