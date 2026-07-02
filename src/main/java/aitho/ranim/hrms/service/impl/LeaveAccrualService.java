@@ -54,6 +54,8 @@ public class LeaveAccrualService implements ILeaveAccrualService {
                                 employee, month, year);
 
                 if (alreadyProcessed) {
+                    log.info("Skipping employee {} because accrual already exists for {}/{}",
+                            employee.getId(), month, year);
                     skipped++;
                     continue;
                 }

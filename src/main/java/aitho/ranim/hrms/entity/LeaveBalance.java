@@ -17,14 +17,20 @@ public class LeaveBalance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "employee_id", unique = true)
+    @OneToOne(optional = false)
+    @JoinColumn(name = "employee_id", nullable = false, unique = true)
     private Employee employee;
-    private BigDecimal accruedDays;
-    private BigDecimal usedDays;
-    private BigDecimal pendingDays;
-    private BigDecimal accruedHours;
-    private BigDecimal usedHours;
-    private BigDecimal pendingHours;
+    @Column(nullable = false)
+    private BigDecimal accruedDays = BigDecimal.ZERO;
+    @Column(nullable = false)
+    private BigDecimal usedDays = BigDecimal.ZERO;
+    @Column(nullable = false)
+    private BigDecimal pendingDays  = BigDecimal.ZERO;
+    @Column(nullable = false)
+    private BigDecimal accruedHours  = BigDecimal.ZERO;
+    @Column(nullable = false)
+    private BigDecimal usedHours  = BigDecimal.ZERO;
+    @Column(nullable = false)
+    private BigDecimal pendingHours = BigDecimal.ZERO;
     private LocalDate lastAccrualDate;
 }

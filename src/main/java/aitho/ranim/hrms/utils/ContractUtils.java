@@ -32,7 +32,7 @@ public class ContractUtils {
 
         return new ContractResponse(
                 contract.getId(),
-                contract.getEmployee(),
+                contract.getEmployee().getId(),
                 contract.getContractType(),
                 contract.getPosition(),
                 contract.getDepartment(),

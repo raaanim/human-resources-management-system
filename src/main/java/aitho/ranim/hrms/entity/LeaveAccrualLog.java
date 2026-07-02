@@ -28,6 +28,7 @@ public class LeaveAccrualLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(optional = false)
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
     private int accrualMonth;
     private int accrualYear;
