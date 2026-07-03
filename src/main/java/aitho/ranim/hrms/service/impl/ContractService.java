@@ -78,6 +78,7 @@ public class ContractService implements IContractService {
 
             contractRepository.deactivateByEmployeeId(employeeId);
             contract.setActive(true);
+            contractRepository.save(contract);
    }
 
     public void checkAccess(Long employeeId){
