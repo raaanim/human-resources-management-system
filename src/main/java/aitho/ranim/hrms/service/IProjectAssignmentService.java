@@ -1,9 +1,9 @@
 package aitho.ranim.hrms.service;
 
-import aitho.ranim.hrms.dto.AssignEmployeeRequest;
-import aitho.ranim.hrms.dto.EmployeeProjectAssignmentResponse;
-import aitho.ranim.hrms.dto.ProjectAssignmentResponse;
-import aitho.ranim.hrms.dto.ProjectEmployeeAssignmentResponse;
+import aitho.ranim.hrms.dto.employeeDto.AssignEmployeeRequest;
+import aitho.ranim.hrms.dto.projectAssignmentDto.EmployeeProjectAssignmentResponse;
+import aitho.ranim.hrms.dto.projectAssignmentDto.ProjectAssignmentResponse;
+import aitho.ranim.hrms.dto.projectAssignmentDto.ProjectEmployeeAssignmentResponse;
 
 import java.util.List;
 

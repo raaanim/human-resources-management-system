@@ -1,4 +1,4 @@
-package aitho.ranim.hrms.dto;
+package aitho.ranim.hrms.dto.projectDto;
 
 import java.time.LocalDate;
 

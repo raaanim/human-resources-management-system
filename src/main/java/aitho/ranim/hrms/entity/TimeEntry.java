@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Table(
-        name = "time-entry",
+        name = "time_entry",
         uniqueConstraints = {
             @UniqueConstraint(
                     columnNames = {"employee_id", "project_id", "date"}
@@ -21,7 +21,7 @@ import java.time.LocalDate;
 @Entity
 public class TimeEntry {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     private Employee employee;

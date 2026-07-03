@@ -1,8 +1,8 @@
 package aitho.ranim.hrms.service;
 
-import aitho.ranim.hrms.dto.ProjectHoursReportResponse;
-import aitho.ranim.hrms.dto.TimeEntryRequest;
-import aitho.ranim.hrms.dto.TimeEntryResponse;
+import aitho.ranim.hrms.dto.projectDto.ProjectHoursReportResponse;
+import aitho.ranim.hrms.dto.timeEntryDto.TimeEntryRequest;
+import aitho.ranim.hrms.dto.timeEntryDto.TimeEntryResponse;
 
 import java.util.List;
 

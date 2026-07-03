@@ -1,6 +1,6 @@
 package aitho.ranim.hrms.utils;
 
-import aitho.ranim.hrms.dto.TimeEntryResponse;
+import aitho.ranim.hrms.dto.timeEntryDto.TimeEntryResponse;
 import aitho.ranim.hrms.entity.TimeEntry;
 import lombok.experimental.UtilityClass;
 

@@ -1,6 +1,6 @@
 package aitho.ranim.hrms.validation;
 
-import aitho.ranim.hrms.dto.ProjectRequest;
+import aitho.ranim.hrms.dto.projectDto.ProjectRequest;
 import aitho.ranim.hrms.enums.ProjectStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

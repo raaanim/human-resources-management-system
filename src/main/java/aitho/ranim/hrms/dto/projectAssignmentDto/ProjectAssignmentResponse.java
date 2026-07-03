@@ -1,4 +1,4 @@
-package aitho.ranim.hrms.dto;
+package aitho.ranim.hrms.dto.projectAssignmentDto;
 
 import aitho.ranim.hrms.enums.AssignmentRole;
 import jakarta.validation.constraints.NotBlank;

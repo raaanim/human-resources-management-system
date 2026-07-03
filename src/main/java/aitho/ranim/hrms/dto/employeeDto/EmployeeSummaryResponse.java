@@ -1,4 +1,4 @@
-package aitho.ranim.hrms.dto;
+package aitho.ranim.hrms.dto.employeeDto;
 
 public record EmployeeSummaryResponse(
         Long id,
