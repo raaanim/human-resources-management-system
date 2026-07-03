@@ -2,6 +2,7 @@ package aitho.ranim.hrms.config;
 
 import aitho.ranim.hrms.config.security.JwtAuthenticationFilter;
 import aitho.ranim.hrms.exception.AccessDeniedResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import tools.jackson.databind.ObjectMapper;
+
 
 import java.time.LocalDateTime;
 
@@ -30,10 +31,10 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final ObjectMapper objectMapper;
 
-    public SecurityConfig(UserDetailsService userDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter, ObjectMapper objectMapper) {
+    public SecurityConfig(UserDetailsService userDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.userDetailsService = userDetailsService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.objectMapper = objectMapper;
+        this.objectMapper = new ObjectMapper();
     }
 
     @Bean
@@ -49,6 +50,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,"/api/v1/employee/{id}").hasAnyRole("ADMIN", "HR", "EMPLOYEE")
                         .requestMatchers(HttpMethod.PATCH,"/api/v1/employee/update/{id}").hasAnyRole("ADMIN", "HR")
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/employee/delete/{id}").hasRole("ADMIN")
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex.accessDeniedHandler((request, response, accessDeniedException) -> {

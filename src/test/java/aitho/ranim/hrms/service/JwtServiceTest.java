@@ -27,6 +27,8 @@ public class JwtServiceTest {
 
         userDetails = User
                 .withUsername("testUser")
+                .authorities("ROLE_USER")
+                .password("password")
                 .build();
     }
 
