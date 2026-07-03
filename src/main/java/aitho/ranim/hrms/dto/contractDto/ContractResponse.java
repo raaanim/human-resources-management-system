@@ -12,9 +12,9 @@ import java.time.LocalDate;
 )
 public record ContractResponse(
         @Schema(description = "Contract ID", example = "1")
-        long id,
+        Long id,
         @Schema(description = "Employee linked to contract")
-        Employee employee,
+        Long employeeId,
         @Schema(description = "Type of contract", example = "FULL_TIME")
         ContractType contractType,
         @Schema(description = "Job position", example = "Software Engineer")

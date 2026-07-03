@@ -35,4 +35,6 @@ app:
     notification-email: "hr@azienda.it"
   scheduler:
     contract-expiry-cron: "0 0 8 * * *"
-kind: Application
+leave:
+  accrual:
+    cron: "0 0 6 1 * *"

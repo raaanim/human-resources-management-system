@@ -16,18 +16,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.TestingAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import java.util.Arrays;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collection;
-import org.springframework.security.core.GrantedAuthority;
 import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
@@ -151,9 +145,21 @@ public class ContractServiceTest {
 
         mockAuthAsAdmin();
 
+        Employee employee = new Employee();
+        employee.setId(employeeId);
+
         Contract contract = new Contract();
         contract.setId(1L);
         contract.setActive(true);
+        contract.setEmployee(employee);
+        contract.setContractType(ContractType.FULL_TIME);
+        contract.setPosition("Developer");
+        contract.setDepartment("IT");
+        contract.setGrossAnnualSalary(BigDecimal.valueOf(40000));
+        contract.setStartDate(LocalDate.of(2025, 1, 1));
+        contract.setMonthlyLeaveDays(BigDecimal.valueOf(2.5));
+        contract.setMonthlyLeaveHours(BigDecimal.valueOf(18));
+        contract.setNotes("Active contract");
 
         when(contractRepository.findFirstByEmployeeIdAndActiveTrue(employeeId))
                 .thenReturn(Optional.of(contract));
@@ -162,6 +168,7 @@ public class ContractServiceTest {
 
         assertNotNull(response);
         assertEquals(1L, response.id());
+        assertEquals(employeeId, response.employeeId());
         assertTrue(response.active());
 
         verify(contractRepository).findFirstByEmployeeIdAndActiveTrue(employeeId);
@@ -226,11 +233,11 @@ public class ContractServiceTest {
         Long id = 1L;
         Long employeeId = 10L;
 
-        Contract contract = new Contract();
-        contract.setId(id);
-
         Employee employee = new Employee();
         employee.setId(employeeId);
+
+        Contract contract = new Contract();
+        contract.setId(id);
         contract.setEmployee(employee);
 
         when(contractRepository.findById(id))

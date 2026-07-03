@@ -1,20 +1,23 @@
 package aitho.ranim.hrms.repository;
 
 import aitho.ranim.hrms.entity.Contract;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-
+import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface IContractRepository extends JpaRepository<Contract, Long> {
     List<Contract> findByEmployeeIdOrderByStartDateDesc(Long employeeId);
     Optional<Contract> findFirstByEmployeeIdAndActiveTrue(Long employeeId);
     List<Contract>findByActiveTrueAndEndDateBetween(LocalDate start, LocalDate end);
 
     @Modifying
+    @Transactional
     @Query("""
         update Contract c
         set c.active = false

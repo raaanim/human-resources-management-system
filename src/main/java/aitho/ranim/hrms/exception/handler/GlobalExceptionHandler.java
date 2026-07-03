@@ -133,4 +133,21 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(e.getStatusCode()).body(contractErrorResponse);
     }
+    @ExceptionHandler(value = LeaveAccrualException.class)
+    public ResponseEntity<CustomErrorResponse> handleLeaveAccrualException(
+            LeaveAccrualException e,
+            HttpServletRequest request
+    ) {
+        log.error("Leave accrual error: {}", e.getMessage());
+
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now().toString(),
+                HttpStatus.BAD_REQUEST,
+                e.getMessage(),
+                "Leave accrual processing error",
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 }
