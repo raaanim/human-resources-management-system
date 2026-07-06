@@ -6,6 +6,7 @@ import aitho.ranim.hrms.entity.LeaveAccrualLog;
 import aitho.ranim.hrms.entity.LeaveBalance;
 import aitho.ranim.hrms.repository.ILeaveAccrualLogRepository;
 import aitho.ranim.hrms.repository.ILeaveBalanceRepository;
+import aitho.ranim.hrms.utils.LeaveBalanceUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,18 +33,21 @@ import java.time.LocalDateTime;
                 ? contract.getMonthlyLeaveHours()
                 : BigDecimal.ZERO;
 
+        processCustomAccrual(employee, contract, month, year, today, monthlyDays, monthlyHours);
+    }
+
+    @Transactional
+    public void processCustomAccrual(
+            Employee employee,
+            Contract contract,
+            int month,
+            int year,
+            LocalDate accrualDate,
+            BigDecimal daysToAdd,
+            BigDecimal hoursToAdd
+    ) {
         LeaveBalance balance = leaveBalanceRepository.findByEmployee_Id(employee.getId())
-                .orElseGet(() -> {
-                    LeaveBalance b = new LeaveBalance();
-                    b.setEmployee(employee);
-                    b.setAccruedDays(BigDecimal.ZERO);
-                    b.setUsedDays(BigDecimal.ZERO);
-                    b.setPendingDays(BigDecimal.ZERO);
-                    b.setAccruedHours(BigDecimal.ZERO);
-                    b.setUsedHours(BigDecimal.ZERO);
-                    b.setPendingHours(BigDecimal.ZERO);
-                    return b;
-                });
+                .orElseGet(() -> LeaveBalanceUtils.createLeaveBalanceForEmployee(employee));
 
         log.info("Before accrual employee={}, balanceId={}, days={}, hours={}",
                 employee.getId(),
@@ -51,9 +55,9 @@ import java.time.LocalDateTime;
                 balance.getAccruedDays(),
                 balance.getAccruedHours());
 
-        balance.setAccruedDays(balance.getAccruedDays().add(monthlyDays));
-        balance.setAccruedHours(balance.getAccruedHours().add(monthlyHours));
-        balance.setLastAccrualDate(today);
+        balance.setAccruedDays(balance.getAccruedDays().add(daysToAdd));
+        balance.setAccruedHours(balance.getAccruedHours().add(hoursToAdd));
+        balance.setLastAccrualDate(accrualDate);
 
         LeaveBalance savedBalance = leaveBalanceRepository.saveAndFlush(balance);
 
@@ -67,8 +71,8 @@ import java.time.LocalDateTime;
                 .employee(employee)
                 .accrualMonth(month)
                 .accrualYear(year)
-                .daysAccrued(monthlyDays)
-                .hoursAccrued(monthlyHours)
+                .daysAccrued(daysToAdd)
+                .hoursAccrued(hoursToAdd)
                 .contractSnapshot(contract.getPosition())
                 .processedAt(LocalDateTime.now())
                 .build();

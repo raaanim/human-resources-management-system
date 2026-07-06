@@ -2,14 +2,20 @@ package aitho.ranim.hrms.service.impl;
 
 import aitho.ranim.hrms.dto.employeeDto.*;
 import aitho.ranim.hrms.entity.Employee;
+import aitho.ranim.hrms.entity.LeaveBalance;
 import aitho.ranim.hrms.entity.Role;
+import aitho.ranim.hrms.exception.EmailCustomException;
 import aitho.ranim.hrms.exception.EmployeeException;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
+import aitho.ranim.hrms.repository.ILeaveBalanceRepository;
 import aitho.ranim.hrms.repository.IRoleRepository;
 import aitho.ranim.hrms.service.IEmailService;
 import aitho.ranim.hrms.service.IEmployeeService;
+import aitho.ranim.hrms.service.ILeaveAccrualService;
 import aitho.ranim.hrms.utils.EmployeeUtils;
+import aitho.ranim.hrms.utils.LeaveBalanceUtils;
 import aitho.ranim.hrms.viewmodel.EmployeeViewModel;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
@@ -31,7 +36,10 @@ public class EmployeeService implements IEmployeeService {
     private final IEmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
     private final IEmailService emailService;
+    private final ILeaveAccrualService leaveAccrualService;
+    private final ILeaveBalanceRepository leaveBalanceRepository;
 
+    @Transactional
     @Override
     public CreateEmployeeResponse createEmployee(EmployeeRequest request) {
         Employee employee = EmployeeUtils.createEmployeeFromRequest(request);
@@ -43,11 +51,19 @@ public class EmployeeService implements IEmployeeService {
         employee.setStatus("PENDING");
         employee.setActivationToken(UUID.randomUUID().toString());
 
-
         Employee savedEmployee = employeeRepository.save(employee);
 
-        String activationLink = "http://localhost:8080/view/v1/employee/activate/" + savedEmployee.getActivationToken();
-        emailService.sendActivationEmail(savedEmployee, activationLink);
+        LeaveBalance leaveBalance = LeaveBalanceUtils.createLeaveBalanceForEmployee(savedEmployee);
+
+        leaveBalanceRepository.save(leaveBalance);
+        leaveAccrualService.processFirstMonthAccrual(savedEmployee);
+
+        try {
+            String activationLink = "http://localhost:8080/view/v1/employee/activate/" + savedEmployee.getActivationToken();
+            emailService.sendActivationEmail(savedEmployee, activationLink);
+        }catch (EmailCustomException ex){
+            log.error("Activation email could not be sent to {}: {}", savedEmployee.getEmail(), ex.getMessage());
+        }
         return new CreateEmployeeResponse(
                 LocalDate.now(),
                 "Employee profile successfully created"
@@ -62,7 +78,11 @@ public class EmployeeService implements IEmployeeService {
         employee.setStatus("ACTIVE");
         employee.setActivationToken(null);
         employeeRepository.save(employee);
-        emailService.sendWelcomeEmail(employee);
+        try {
+            emailService.sendWelcomeEmail(employee);
+        }catch(EmailCustomException ex){
+            log.error("Welcome email could not be sent to {}: {}", employee.getEmail(), ex.getMessage());
+        }
         return new EmployeeViewModel(
                 employee.getFirstName(),
                 employee.getLastName()
