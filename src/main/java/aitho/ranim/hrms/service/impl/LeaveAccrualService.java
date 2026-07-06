@@ -143,12 +143,14 @@ public class LeaveAccrualService implements ILeaveAccrualService {
         BigDecimal firstMonthDays = monthlyDays.multiply(ratio).setScale(2, RoundingMode.HALF_UP);
         BigDecimal firstMonthHours = monthlyHours.multiply(ratio).setScale(2, RoundingMode.HALF_UP);
 
-        leaveAccrualEmployeeService.processAccrual(
+        leaveAccrualEmployeeService.processCustomAccrual(
                 employee,
                 contract,
                 month,
                 year,
-                startDate
+                startDate,
+                firstMonthDays,
+                firstMonthHours
         );
     }
 
@@ -158,7 +160,7 @@ public class LeaveAccrualService implements ILeaveAccrualService {
 
         for (int i = 1; i <= yearMonth.lengthOfMonth(); i++) {
             LocalDate current = yearMonth.atDay(i);
-            if (isWeekend(current)) {
+            if (isWorkingDay(current)) {
                 count++;
             }
         }
@@ -171,14 +173,14 @@ public class LeaveAccrualService implements ILeaveAccrualService {
 
         for (int i = startDate.getDayOfMonth(); i <= yearMonth.lengthOfMonth(); i++) {
             LocalDate current = yearMonth.atDay(i);
-            if (isWeekend(current)) {
+            if (isWorkingDay(current)) {
                 count++;
             }
         }
         return count;
     }
 
-    private boolean isWeekend(LocalDate date) {
+    private boolean isWorkingDay(LocalDate date) {
         DayOfWeek day = date.getDayOfWeek();
         return day != DayOfWeek.SATURDAY && day != DayOfWeek.SUNDAY;
     }
