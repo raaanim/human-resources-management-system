@@ -102,7 +102,6 @@ public class ProjectAssignmentTest {
                 ProjectAssignmentException.class,
                 () -> projectService.assignEmployeeToProject(request)
         );
-
         assertEquals(HttpStatus.CONFLICT, ex.getStatusCode());
         assertEquals("Employee is already assigned to this project", ex.getMessage());
     }
