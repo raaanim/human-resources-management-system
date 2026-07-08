@@ -168,4 +168,21 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
+    @ExceptionHandler(value = LeaveRequestException.class)
+    public ResponseEntity<LeaveRequestErrorResponse> handleLeaveAccrualException(
+            LeaveRequestException e,
+            HttpServletRequest request
+    ) {
+        log.error("Leave request error: {}", e.getMessage());
+
+        LeaveRequestErrorResponse errorResponse = new LeaveRequestErrorResponse(
+                LocalDateTime.now().toString(),
+                HttpStatus.BAD_REQUEST,
+                e.getMessage(),
+                "Leave request processing error",
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 }
