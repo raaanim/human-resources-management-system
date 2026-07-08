@@ -56,7 +56,7 @@ public class LeaveRequestServiceTest {
             void setup() {
                 employee = new Employee();
                 employee.setId(1L);
-                employee.setEmail("mario@test.com");
+                employee.setEmail("user@test.com");
 
                 leaveBalance = new LeaveBalance();
                 leaveBalance.setAccruedDays(new BigDecimal("20"));
@@ -67,7 +67,7 @@ public class LeaveRequestServiceTest {
                         .getContext()
                         .setAuthentication(
                                 new UsernamePasswordAuthenticationToken(
-                                        "mario@test.com",
+                                        "user@test.com",
                                         null
                                 )
                         );
@@ -83,7 +83,7 @@ public class LeaveRequestServiceTest {
                                 "Casual leave"
                         );
 
-                when(employeeRepository.findByEmail("mario@test.com"))
+                when(employeeRepository.findByEmail("user@test.com"))
                         .thenReturn(Optional.of(employee));
 
                 when(businessDaysCalculator.calculate(
@@ -299,4 +299,3 @@ public class LeaveRequestServiceTest {
 
             }
 }
-
