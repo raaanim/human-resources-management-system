@@ -18,8 +18,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-
 import java.time.LocalDateTime;
 
 
@@ -50,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,"/api/v1/employee/{id}").hasAnyRole("ADMIN", "HR", "EMPLOYEE")
                         .requestMatchers(HttpMethod.PATCH,"/api/v1/employee/update/{id}").hasAnyRole("ADMIN", "HR")
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/employee/delete/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/v1/leave-request/submit").hasRole("EMPLOYEE")
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",

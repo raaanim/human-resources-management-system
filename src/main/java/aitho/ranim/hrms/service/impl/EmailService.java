@@ -1,6 +1,7 @@
 package aitho.ranim.hrms.service.impl;
 import aitho.ranim.hrms.entity.Contract;
 import aitho.ranim.hrms.entity.Employee;
+import aitho.ranim.hrms.entity.LeaveRequest;
 import aitho.ranim.hrms.exception.EmailCustomException;
 import aitho.ranim.hrms.service.IEmailService;
 import jakarta.mail.internet.MimeMessage;
@@ -11,7 +12,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -93,5 +93,23 @@ public class EmailService implements IEmailService {
             log.error("Failed sending email to {}", to, e);
             throw new EmailCustomException("Failed to send email: ", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public void sendLeaveRequestSubmitted(LeaveRequest leaveRequest) {
+
+        Context context = new Context();
+
+        context.setVariable("leaveRequest", leaveRequest);
+
+        String html = templateEngine.process(
+                "leave-request-submitted",
+                context
+        );
+
+        sendHtml(
+                "hr@email.com",
+                "New leave request",
+                html
+        );
     }
 }

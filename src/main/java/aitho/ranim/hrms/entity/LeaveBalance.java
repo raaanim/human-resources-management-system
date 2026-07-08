@@ -20,17 +20,17 @@ public class LeaveBalance {
     @OneToOne(optional = false)
     @JoinColumn(name = "employee_id", nullable = false, unique = true)
     private Employee employee;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,2) DEFAULT 0")
     private BigDecimal accruedDays = BigDecimal.ZERO;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,2) DEFAULT 0")
     private BigDecimal usedDays = BigDecimal.ZERO;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,2) DEFAULT 0")
     private BigDecimal pendingDays  = BigDecimal.ZERO;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,2) DEFAULT 0")
     private BigDecimal accruedHours  = BigDecimal.ZERO;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,2) DEFAULT 0")
     private BigDecimal usedHours  = BigDecimal.ZERO;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "DECIMAL(10,2) DEFAULT 0")
     private BigDecimal pendingHours = BigDecimal.ZERO;
     private LocalDate lastAccrualDate;
 }
