@@ -24,7 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -169,7 +170,56 @@ public class LeaveRequestService implements ILeaveRequestService {
         }
 
             return LeaveRequestUtils.toLeaveRequestResponse(saved);
+    }
+
+    public void cancelRequest(Long id) {
+        LeaveRequest leaveRequest =
+                leaveRequestRepository.findById(id)
+                        .orElseThrow(() ->
+                                new LeaveRequestException(
+                                        "Leave request not found", HttpStatus.NOT_FOUND, "/leave-request"
+                                )
+                        );
+
+        if (leaveRequest.getStatus() != LeaveRequestsStatus.PENDING) {
+            throw new LeaveRequestException(
+                    "Only pending requests can be cancelled", HttpStatus.BAD_REQUEST, "/leave-request"
+            );
         }
+        leaveRequestRepository.delete(leaveRequest);
+    }
+
+    public List<LeaveRequestResponse> getAllMyLeaveRequests() {
+
+            String email = SecurityContextHolder
+                    .getContext()
+                    .getAuthentication()
+                    .getName();
+
+            List<LeaveRequest> leaveRequests =
+                    leaveRequestRepository.findByEmployee_Email(email);
+
+            return leaveRequests.stream()
+                    .map(LeaveRequestUtils::toLeaveRequestResponse)
+                    .collect(Collectors.toList());
+    }
+
+    public List<LeaveRequestResponse> getAllPendingLeaveRequestsForAdmin() {
+        List<LeaveRequest> leaveRequests = leaveRequestRepository.findByStatus(LeaveRequestsStatus.PENDING);
+        return leaveRequests.stream()
+                .map(LeaveRequestUtils::toLeaveRequestResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<LeaveRequestResponse> getAllLeaveRequestsMadeByEmployee(Long employeeId) {
+
+        List<LeaveRequest> leaveRequests =
+                leaveRequestRepository.findByEmployee_Id(employeeId);
+
+        return leaveRequests.stream()
+                .map(LeaveRequestUtils::toLeaveRequestResponse)
+                .collect(Collectors.toList());
+    }
 
     private static BigDecimal getBigDecimal(LeaveBalance leaveBalance) {
         BigDecimal accruedDays = leaveBalance.getAccruedDays() != null
