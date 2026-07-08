@@ -2,9 +2,11 @@ package aitho.ranim.hrms.service;
 
 import aitho.ranim.hrms.dto.employeeDto.*;
 import aitho.ranim.hrms.entity.Employee;
+import aitho.ranim.hrms.entity.LeaveBalance;
 import aitho.ranim.hrms.entity.Role;
 import aitho.ranim.hrms.enums.RoleName;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
+import aitho.ranim.hrms.repository.ILeaveBalanceRepository;
 import aitho.ranim.hrms.repository.IRoleRepository;
 import aitho.ranim.hrms.service.impl.EmployeeService;
 import org.junit.jupiter.api.Test;
@@ -38,6 +40,10 @@ public class EmployeeServiceTest {
 
     @Mock
     private IEmailService emailService;
+    @Mock
+    private  ILeaveAccrualService leaveAccrualService;
+    @Mock
+    private ILeaveBalanceRepository leaveBalanceRepository;
 
     @InjectMocks
     private EmployeeService employeeService;
@@ -76,10 +82,17 @@ public class EmployeeServiceTest {
         when(employeeRepository.save(any(Employee.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
+        when(leaveBalanceRepository.save(any(LeaveBalance.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        doNothing().when(emailService).sendActivationEmail(any(Employee.class), anyString());
+
         var response = employeeService.createEmployee(request);
 
         assertNotNull(response);
 
+        verify(leaveBalanceRepository, times(1)).save(any(LeaveBalance.class));
+        verify(leaveAccrualService, times(1)).processFirstMonthAccrual(any(Employee.class));
         verify(roleRepository, times(1)).findByName(request.role());
         verify(passwordEncoder, times(1)).encode(anyString());
         verify(employeeRepository, times(1)).save(any(Employee.class));
@@ -99,13 +112,14 @@ public class EmployeeServiceTest {
         when(employeeRepository.findByActivationToken(token))
                 .thenReturn(Optional.of(employee));
 
+        doNothing().when(emailService).sendWelcomeEmail(any(Employee.class));
+
         employeeService.activateEmployee(token);
 
         assertEquals("ACTIVE", employee.getStatus());
         assertNull(employee.getActivationToken());
 
         verify(employeeRepository, times(1)).save(employee);
-
     }
 
     @Test

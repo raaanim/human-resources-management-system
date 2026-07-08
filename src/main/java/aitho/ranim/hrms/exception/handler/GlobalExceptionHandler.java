@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
+import static org.apache.commons.lang3.compare.ComparableUtils.ge;
 
 
 @RestControllerAdvice
@@ -145,6 +146,23 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST,
                 e.getMessage(),
                 "Leave accrual processing error",
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+    @ExceptionHandler(value = LeaveBalanceException.class)
+    public ResponseEntity<LeaveBalanceErrorResponse> handleLeaveAccrualException(
+            LeaveBalanceException e,
+            HttpServletRequest request
+    ) {
+        log.error("Leave balance error: {}", e.getMessage());
+
+        LeaveBalanceErrorResponse errorResponse = new LeaveBalanceErrorResponse(
+                LocalDateTime.now().toString(),
+                HttpStatus.BAD_REQUEST,
+                e.getMessage(),
+                "Leave balance processing error",
                 request.getRequestURI()
         );
 

@@ -1,9 +1,9 @@
 package aitho.ranim.hrms.dto.leaveBalanceDto;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public record LeaveBalanceResponse(
+
+public record LeaveBalanceSummaryResponse(
         BigDecimal accruedDays,
         BigDecimal usedDays,
         BigDecimal pendingDays,
@@ -12,13 +12,13 @@ public record LeaveBalanceResponse(
         BigDecimal usedHours,
         BigDecimal pendingHours,
         BigDecimal availableHours,
-        LocalDate lastAccrualDate
+        LocalDate lastAccrualDate,
+        BigDecimal nextMonthExpectedDays,
+        BigDecimal nextMonthExpectedHours
 ) {
     public BigDecimal availableDays() {
-        return accruedDays.subtract(usedDays).subtract(pendingDays);
-    }
-
-    public BigDecimal availableHours() {
-        return accruedHours.subtract(usedHours).subtract(pendingHours);
+        return accruedDays
+                .subtract(usedDays)
+                .subtract(pendingDays);
     }
 }
