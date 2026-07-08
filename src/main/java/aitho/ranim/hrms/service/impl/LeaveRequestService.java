@@ -97,19 +97,18 @@ public class LeaveRequestService implements ILeaveRequestService {
                     leaveRequestRepository.findById(id)
                             .orElseThrow(() ->
                                     new LeaveRequestException(
-                                            "Leave request not found", HttpStatus.NOT_FOUND, "/leave-request"
+                                            "Leave request not found", HttpStatus.NOT_FOUND, "/leave-request/review"
                                     )
                             );
-
             if (leaveRequest.getStatus() != LeaveRequestsStatus.PENDING) {
                 throw new LeaveRequestException(
-                        "Only pending requests can be reviewed", HttpStatus.BAD_REQUEST, "/leave-request"
+                        "Only pending requests can be reviewed", HttpStatus.BAD_REQUEST, "/leave-request/review"
                 );
             }
 
             Employee reviewer = employeeRepository.findByEmail(
                     SecurityContextHolder.getContext().getAuthentication().getName()
-            ).orElseThrow(() -> new EmployeeException("Reviewer not found", HttpStatus.NOT_FOUND, "/leave-request"));
+            ).orElseThrow(() -> new EmployeeException("Reviewer not found", HttpStatus.NOT_FOUND, "/leave-request/review"));
 
             Employee employee = leaveRequest.getEmployee();
 
@@ -117,41 +116,34 @@ public class LeaveRequestService implements ILeaveRequestService {
                     leaveBalanceRepository.findByEmployee_Id(employee.getId())
                             .orElseThrow(() ->
                                     new LeaveBalanceException(
-                                            "Leave balance not found",  HttpStatus.NOT_FOUND, "/leave-request"
+                                            "Leave balance not found",  HttpStatus.NOT_FOUND, "/leave-request/review"
                                     )
                             );
-
             BigDecimal days = leaveRequest.getTotalDays();
 
         if (LeaveRequestsStatus.APPROVED.equals(request.status())) {
-
             leaveBalance.setPendingDays(
                     safe(leaveBalance.getPendingDays())
                             .subtract(days)
             );
-
             leaveBalance.setUsedDays(
                     safe(leaveBalance.getUsedDays())
                             .add(days)
             );
-
             leaveRequest.setStatus(LeaveRequestsStatus.APPROVED);
 
         } else if (LeaveRequestsStatus.REJECTED.equals(request.status())) {
-
             leaveBalance.setPendingDays(
                     safe(leaveBalance.getPendingDays())
                             .subtract(days)
             );
-
             leaveRequest.setStatus(LeaveRequestsStatus.REJECTED);
 
         } else {
-
             throw new LeaveRequestException(
                     "Review status must be APPROVED or REJECTED",
                     HttpStatus.BAD_REQUEST,
-                    "/leave-request"
+                    "/leave-request/review"
             );
         }
 
@@ -177,13 +169,13 @@ public class LeaveRequestService implements ILeaveRequestService {
                 leaveRequestRepository.findById(id)
                         .orElseThrow(() ->
                                 new LeaveRequestException(
-                                        "Leave request not found", HttpStatus.NOT_FOUND, "/leave-request"
+                                        "Leave request not found", HttpStatus.NOT_FOUND, "/leave-request/cancel"
                                 )
                         );
 
         if (leaveRequest.getStatus() != LeaveRequestsStatus.PENDING) {
             throw new LeaveRequestException(
-                    "Only pending requests can be cancelled", HttpStatus.BAD_REQUEST, "/leave-request"
+                    "Only pending requests can be cancelled", HttpStatus.BAD_REQUEST, "/leave-request/cancel"
             );
         }
         leaveRequestRepository.delete(leaveRequest);
@@ -212,7 +204,6 @@ public class LeaveRequestService implements ILeaveRequestService {
     }
 
     public List<LeaveRequestResponse> getAllLeaveRequestsMadeByEmployee(Long employeeId) {
-
         List<LeaveRequest> leaveRequests =
                 leaveRequestRepository.findByEmployee_Id(employeeId);
 
@@ -244,5 +235,5 @@ public class LeaveRequestService implements ILeaveRequestService {
     private BigDecimal safe(BigDecimal value) {
         return value != null ? value : BigDecimal.ZERO;
     }
-    }
+}
 
