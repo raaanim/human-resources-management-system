@@ -5,6 +5,7 @@ import aitho.ranim.hrms.entity.Employee;
 import aitho.ranim.hrms.entity.LeaveBalance;
 import aitho.ranim.hrms.entity.Role;
 import aitho.ranim.hrms.enums.RoleName;
+import aitho.ranim.hrms.exception.EmployeeException;
 import aitho.ranim.hrms.repository.IEmployeeRepository;
 import aitho.ranim.hrms.repository.ILeaveBalanceRepository;
 import aitho.ranim.hrms.repository.IRoleRepository;
@@ -31,20 +32,16 @@ import static org.mockito.Mockito.*;
 public class EmployeeServiceTest {
     @Mock
     private IRoleRepository  roleRepository;
-
     @Mock
     private IEmployeeRepository employeeRepository;
-
     @Mock
     private PasswordEncoder passwordEncoder;
-
     @Mock
     private IEmailService emailService;
     @Mock
     private  ILeaveAccrualService leaveAccrualService;
     @Mock
     private ILeaveBalanceRepository leaveBalanceRepository;
-
     @InjectMocks
     private EmployeeService employeeService;
 
@@ -98,21 +95,19 @@ public class EmployeeServiceTest {
         verify(employeeRepository, times(1)).save(any(Employee.class));
     }
 
-
     @Test
-    public void testActivateEmployee() {
+    void testActivateEmployee_CheckWelcomeEmailSent() {
         String token = "valid-token";
 
         Employee employee = new Employee();
+        employee.setFirstName("John");
+        employee.setLastName("Doe");
+        employee.setEmail("john@test.com");
         employee.setActivationToken(token);
         employee.setStatus("PENDING");
 
-        ActivateAccountRequest request = new ActivateAccountRequest("newPassword");
-
         when(employeeRepository.findByActivationToken(token))
                 .thenReturn(Optional.of(employee));
-
-        doNothing().when(emailService).sendWelcomeEmail(any(Employee.class));
 
         employeeService.activateEmployee(token);
 
@@ -120,6 +115,8 @@ public class EmployeeServiceTest {
         assertNull(employee.getActivationToken());
 
         verify(employeeRepository, times(1)).save(employee);
+        verify(emailService, times(1))
+                .sendWelcomeEmail(employee);
     }
 
     @Test
@@ -131,11 +128,9 @@ public class EmployeeServiceTest {
         when(employeeRepository.findByActivationToken(token))
                 .thenReturn(Optional.empty());
 
-
-        assertThrows(RuntimeException.class, () -> {
+        assertThrows(EmployeeException.class, () -> {
             employeeService.activateEmployee(token);
         });
-
         verify(employeeRepository, never()).save(any());
     }
 
@@ -151,6 +146,20 @@ public class EmployeeServiceTest {
 
         assertNotNull(response);
         verify(employeeRepository).findById(1L);
+    }
+
+    @Test
+    void testGetEmployeeById_NotFound() {
+        Long id = 99L;
+
+        when(employeeRepository.findById(id))
+                .thenReturn(Optional.empty());
+
+        assertThrows(EmployeeException.class, () -> {
+            employeeService.getEmployeeById(id);
+        });
+
+        verify(employeeRepository).findById(id);
     }
 
     @Test
@@ -183,9 +192,9 @@ public class EmployeeServiceTest {
 
 
         UpdateEmployeeRequest request = UpdateEmployeeRequest.builder()
-                        .firstName("Johnny")
-                        .lastName("Doe")
-                        .build();
+                .firstName("Johnny")
+                .lastName("Doe")
+                .build();
 
         UpdateEmployeeResponse response = employeeService.updateEmployee(1L, request);
         assertNotNull(response);
@@ -205,6 +214,25 @@ public class EmployeeServiceTest {
         assertEquals("NY", employee.getProvince());
         assertEquals("New York", employee.getWorkLocation());
         verify(employeeRepository).save(employee);
+    }
+    @Test
+    void testUpdateEmployee_NotFound() {
+        Long id = 99L;
+
+        UpdateEmployeeRequest request = UpdateEmployeeRequest.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .build();
+
+        when(employeeRepository.findById(id))
+                .thenReturn(Optional.empty());
+
+        assertThrows(EmployeeException.class, () -> {
+            employeeService.updateEmployee(id, request);
+        });
+
+        verify(employeeRepository).findById(id);
+        verify(employeeRepository, never()).save(any(Employee.class));
     }
 
     public static Employee getEmployee() {
@@ -238,5 +266,18 @@ public class EmployeeServiceTest {
         employeeService.deleteEmployee(1L);
 
         verify(employeeRepository).deleteById(1L);
+    }
+
+    @Test
+    void testDeleteEmployee_NotFound() {
+        Employee employee = new Employee();
+        employee.setId(1L);
+        when(employeeRepository.findById(employee.getId())).thenReturn(Optional.empty());
+
+        assertThrows(EmployeeException.class, () -> {
+            employeeService.deleteEmployee(employee.getId());
+        });
+        verify(employeeRepository).findById(employee.getId());
+        verify(employeeRepository, never()).deleteById(anyLong());
     }
 }
