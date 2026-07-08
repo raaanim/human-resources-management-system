@@ -1,0 +1,3206 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Human Resource Management System API",
+    "description": "API documentation for HRMS application",
+    "version": "0.0.1-SNAPSHOT"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Project Controller",
+      "description": "Endpoints for managing projects"
+    },
+    {
+      "name": "Project Assignment Controller",
+      "description": "Endpoints for managing employee-project assignments"
+    },
+    {
+      "name": "Employee View Controller",
+      "description": "MVC endpoints for employee view operations (server-side rendered pages)"
+    },
+    {
+      "name": "Time Entry Controller",
+      "description": "Endpoints for managing time entries"
+    },
+    {
+      "name": "Employee Controller",
+      "description": "Endpoints for creating, retrieving, updating and managing employee information"
+    },
+    {
+      "name": "Contract Controller",
+      "description": "Endpoints for managing contracts"
+    }
+  ],
+  "paths": {
+    "/api/v1/project-assignment/close/{assignmentId}": {
+      "put": {
+        "tags": [
+          "Project Assignment Controller"
+        ],
+        "summary": "Close Project Assignment",
+        "description": "Closes an active project assignment by its ID.",
+        "operationId": "closeAssignment",
+        "parameters": [
+          {
+            "name": "assignmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project assignment closed successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectAssignmentResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Assignment not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectAssignmentResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectAssignmentResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectAssignmentResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/leave-request/review/{id}": {
+      "put": {
+        "tags": [
+          "leave-request-controller"
+        ],
+        "operationId": "reviewLeaveRequest",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaveRequestReviewRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaveRequestResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/leave-request/cancel/{id}": {
+      "put": {
+        "tags": [
+          "leave-request-controller"
+        ],
+        "operationId": "cancelLeaveRequest",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/contract/update/{id}": {
+      "put": {
+        "tags": [
+          "Contract Controller"
+        ],
+        "summary": "Update Contract",
+        "description": "Updates an existing contract.",
+        "operationId": "updateContract",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContractRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Contract updated successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Contract not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contract/activate/{id}": {
+      "put": {
+        "tags": [
+          "Contract Controller"
+        ],
+        "summary": "Activate Contract",
+        "description": "Activates the selected contract and deactivates all other contracts belonging to the same employee.",
+        "operationId": "activateContract",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Contract activated successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Contract not found"
+          }
+        }
+      }
+    },
+    "/api/v1/time-entry": {
+      "post": {
+        "tags": [
+          "Time Entry Controller"
+        ],
+        "summary": "Insert Hours",
+        "description": "Creates a new time entry for the authenticated user.",
+        "operationId": "insertHours",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TimeEntryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Time entry created successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeEntryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeEntryResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeEntryResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeEntryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/project": {
+      "get": {
+        "tags": [
+          "Project Controller"
+        ],
+        "summary": "Get All Projects",
+        "description": "Retrieves all projects with optional filtering by status and pagination.",
+        "operationId": "getAllProjects",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PLANNED",
+                "IN_PROGRESS",
+                "ON_HOLD",
+                "COMPLETED",
+                "CANCELLED"
+              ]
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Projects retrieved successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectSummaryResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectSummaryResponse"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectSummaryResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectSummaryResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Project Controller"
+        ],
+        "summary": "Create Project",
+        "description": "Creates a new project. Accessible by ADMIN and HR roles.",
+        "operationId": "createProject",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Project created successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/project-assignment/assign": {
+      "post": {
+        "tags": [
+          "Project Assignment Controller"
+        ],
+        "summary": "Assign Employee to Project",
+        "description": "Assigns an employee to a project with the provided details.",
+        "operationId": "assignEmployeeToProject",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignEmployeeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Employee assigned to project successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectAssignmentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectAssignmentResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectAssignmentResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectAssignmentResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/leave-request/submit": {
+      "post": {
+        "tags": [
+          "leave-request-controller"
+        ],
+        "operationId": "submitLeaveRequest",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaveRequestSubmitRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaveRequestResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/leave-accrual/process-now": {
+      "post": {
+        "tags": [
+          "leave-accrual-controller"
+        ],
+        "operationId": "processNow",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaveAccrualProcessResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/employee": {
+      "get": {
+        "tags": [
+          "Employee Controller"
+        ],
+        "summary": "Get All Employees",
+        "description": "Retrieves all employees.",
+        "operationId": "getAllEmployees",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Employees retrieved successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageEmployeeSummaryResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageEmployeeSummaryResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageEmployeeSummaryResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Employee Controller"
+        ],
+        "summary": "Create Employee",
+        "description": "Creates a new employee.",
+        "operationId": "createEmployee",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Employee created successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateEmployeeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateEmployeeResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateEmployeeResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateEmployeeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contract": {
+      "post": {
+        "tags": [
+          "Contract Controller"
+        ],
+        "summary": "Create Contract",
+        "description": "Creates a new contract for an employee.",
+        "operationId": "createContract",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContractRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Contract successfully created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/project/update/{id}": {
+      "patch": {
+        "tags": [
+          "Project Controller"
+        ],
+        "summary": "Update Project",
+        "description": "Updates project details by ID.",
+        "operationId": "updateProjectById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProjectRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Project updated successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateProjectResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateProjectResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateProjectResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateProjectResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateProjectResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/employee/update/{id}": {
+      "patch": {
+        "tags": [
+          "Employee Controller"
+        ],
+        "summary": "Update Employee",
+        "description": "Updates an existing employee.",
+        "operationId": "updateEmployee",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateEmployeeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Employee updated successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateEmployeeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateEmployeeResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateEmployeeResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateEmployeeResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Employee not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateEmployeeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/view/v1/employee/activate/{token}": {
+      "get": {
+        "tags": [
+          "Employee View Controller"
+        ],
+        "summary": "Activate Employee",
+        "description": "Activates an employee account using the provided token and returns a server-side rendered view.",
+        "operationId": "activateEmployee",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Employee activated successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or expired token",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Employee not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/time-entry/project/{projectId}/report": {
+      "get": {
+        "tags": [
+          "Time Entry Controller"
+        ],
+        "summary": "Get Project Report",
+        "description": "Returns total worked hours for a specific project.",
+        "operationId": "getProjectReport",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project report retrieved successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectHoursReportResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectHoursReportResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectHoursReportResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectHoursReportResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/time-entry/my_entries": {
+      "get": {
+        "tags": [
+          "Time Entry Controller"
+        ],
+        "summary": "Get My Time Entries",
+        "description": "Retrieves time entries for the authenticated user filtered by month.",
+        "operationId": "getMyEntries",
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Time entries retrieved successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeEntryResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid month format",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeEntryResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeEntryResponse"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeEntryResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/project/{id}": {
+      "get": {
+        "tags": [
+          "Project Controller"
+        ],
+        "summary": "Get Project by ID",
+        "description": "Retrieves project details by its ID.",
+        "operationId": "getProjectById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project retrieved successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/project-assignment/project/{projectId}": {
+      "get": {
+        "tags": [
+          "Project Assignment Controller"
+        ],
+        "summary": "Get Employees Assigned to Project",
+        "description": "Retrieves all employees assigned to a specific project.",
+        "operationId": "getEmployeesAssignedToProject",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Employees retrieved successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmployeeProjectAssignmentResponse"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmployeeProjectAssignmentResponse"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmployeeProjectAssignmentResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmployeeProjectAssignmentResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/project-assignment/employee/{employeeId}": {
+      "get": {
+        "tags": [
+          "Project Assignment Controller"
+        ],
+        "summary": "Get Projects Assigned to Employee",
+        "description": "Retrieves all projects assigned to a specific employee.",
+        "operationId": "getProjectsAssignedToEmployee",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Projects retrieved successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectEmployeeAssignmentResponse"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Employee not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectEmployeeAssignmentResponse"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectEmployeeAssignmentResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectEmployeeAssignmentResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/leave-request/pending": {
+      "get": {
+        "tags": [
+          "leave-request-controller"
+        ],
+        "operationId": "getAllPendingLeaveRequests",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LeaveRequestResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/leave-request/my-requests": {
+      "get": {
+        "tags": [
+          "leave-request-controller"
+        ],
+        "operationId": "getMyLeaveRequests",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LeaveRequestResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/leave-request/employee/{employeeId}": {
+      "get": {
+        "tags": [
+          "leave-request-controller"
+        ],
+        "operationId": "getAllLeaveRequestsByEmployee",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LeaveRequestResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/leave-balance/employee/{employeeId}": {
+      "get": {
+        "tags": [
+          "leave-balance-controller"
+        ],
+        "operationId": "getLeaveBalanceForEmployee",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaveBalanceResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/leave-balance/employee/{employeeId}/summary": {
+      "get": {
+        "tags": [
+          "leave-balance-controller"
+        ],
+        "operationId": "getLeaveBalanceSummaryForEmployee",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaveBalanceSummaryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/leave-accrual/employee/{employeeId}/log": {
+      "get": {
+        "tags": [
+          "leave-accrual-controller"
+        ],
+        "operationId": "getLogs",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LeaveAccrualLogResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/employee/{id}": {
+      "get": {
+        "tags": [
+          "Employee Controller"
+        ],
+        "summary": "Get Employee By Id",
+        "description": "Retrieves an employee by its identifier.",
+        "operationId": "getEmployee",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Employee retrieved successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeDetailResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeDetailResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeDetailResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Employee not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeDetailResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contract/employee/{employeeId}": {
+      "get": {
+        "tags": [
+          "Contract Controller"
+        ],
+        "summary": "Get Contract History",
+        "description": "Retrieves the complete contract history of a specific employee.",
+        "operationId": "getContractHistory",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contract history retrieved successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ContractSummaryResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ContractSummaryResponse"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ContractSummaryResponse"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Employee not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ContractSummaryResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/contract/employee/{employeeId}/active": {
+      "get": {
+        "tags": [
+          "Contract Controller"
+        ],
+        "summary": "Get Active Contract",
+        "description": "Retrieves the currently active contract for a specific employee.",
+        "operationId": "getActiveContract",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Active contract successfully retrieved",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Employee or active contract not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/time-entry/{id}": {
+      "delete": {
+        "tags": [
+          "Time Entry Controller"
+        ],
+        "summary": "Delete Time Entry",
+        "description": "Deletes a time entry by its ID.",
+        "operationId": "deleteEntry",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Time entry deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Time entry not found"
+          }
+        }
+      }
+    },
+    "/api/v1/project/delete/{id}": {
+      "delete": {
+        "tags": [
+          "Project Controller"
+        ],
+        "summary": "Delete Project",
+        "description": "Deletes a project by ID.",
+        "operationId": "deleteProject",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Project deleted successfully"
+          },
+          "404": {
+            "description": "Project not found"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/v1/employee/delete/{id}": {
+      "delete": {
+        "tags": [
+          "Employee Controller"
+        ],
+        "summary": "Delete Employee",
+        "description": "Deletes an employee.",
+        "operationId": "deleteEmployee",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Employee deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Employee not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ProjectAssignmentResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "employeeId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "employeeFullName": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "projectName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "PROJECT_MANAGER",
+              "TECH_LEAD",
+              "DEVELOPER",
+              "QA_ENGINEER",
+              "DESIGNER",
+              "CONSULTANT"
+            ]
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": [
+          "projectName"
+        ]
+      },
+      "LeaveRequestReviewRequest": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "APPROVED",
+              "REJECTED",
+              "CANCELLED"
+            ]
+          },
+          "reviewerNotes": {
+            "type": "string"
+          }
+        }
+      },
+      "LeaveRequestResponse": {
+        "type": "object",
+        "properties": {
+          "employeeId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "employeeName": {
+            "type": "string"
+          },
+          "leaveType": {
+            "type": "string",
+            "enum": [
+              "SICK_LEAVE",
+              "CASUAL_LEAVE",
+              "EARNED_LEAVE",
+              "MATERNITY_LEAVE",
+              "PATERNITY_LEAVE",
+              "BEREAVEMENT_LEAVE",
+              "UNPAID_LEAVE"
+            ]
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "totalDays": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "APPROVED",
+              "REJECTED",
+              "CANCELLED"
+            ]
+          },
+          "employeeNotes": {
+            "type": "string"
+          },
+          "reviewerNotes": {
+            "type": "string"
+          },
+          "reviewerId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reviewerName": {
+            "type": "string"
+          },
+          "requestedAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "reviewedAt": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "ContractRequest": {
+        "type": "object",
+        "properties": {
+          "employee": {
+            "$ref": "#/components/schemas/Employee"
+          },
+          "contractType": {
+            "type": "string",
+            "enum": [
+              "FULL_TIME",
+              "PART_TIME",
+              "FIXED_TIME",
+              "INTERNSHIP",
+              "FREELANCE"
+            ]
+          },
+          "position": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "grossAnnualSalary": {
+            "type": "number"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "monthlyLeaveDays": {
+            "type": "number",
+            "minimum": 0
+          },
+          "monthlyLeaveHours": {
+            "type": "number",
+            "minimum": 0
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "Employee": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "activationToken": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "nationality": {
+            "type": "string"
+          },
+          "birthPlace": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "personalEmail": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "postalCode": {
+            "type": "string"
+          },
+          "province": {
+            "type": "string"
+          },
+          "workLocation": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Role"
+            },
+            "uniqueItems": true
+          }
+        }
+      },
+      "Role": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "enum": [
+              "ROLE_ADMIN",
+              "ROLE_HR",
+              "ROLE_EMPLOYEE"
+            ]
+          }
+        }
+      },
+      "ContractResponse": {
+        "type": "object",
+        "description": "Full contract details response",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Contract ID",
+            "example": 1
+          },
+          "employeeId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Employee linked to contract"
+          },
+          "contractType": {
+            "type": "string",
+            "description": "Type of contract",
+            "enum": [
+              "FULL_TIME",
+              "PART_TIME",
+              "FIXED_TIME",
+              "INTERNSHIP",
+              "FREELANCE"
+            ],
+            "example": "FULL_TIME"
+          },
+          "position": {
+            "type": "string",
+            "description": "Job position",
+            "example": "Software Engineer"
+          },
+          "department": {
+            "type": "string",
+            "description": "Department name",
+            "example": "IT"
+          },
+          "grossAnnualSalary": {
+            "type": "number",
+            "description": "Gross annual salary",
+            "example": 50000
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Contract start date",
+            "example": "2026-01-01"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Contract end date",
+            "example": "2027-01-01"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Is contract active",
+            "example": true
+          },
+          "monthlyLeaveDays": {
+            "type": "number",
+            "description": "Monthly leave days",
+            "example": 2.5
+          },
+          "monthlyLeaveHours": {
+            "type": "number",
+            "description": "Monthly leave hours",
+            "example": 20
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional notes",
+            "example": "Remote allowed"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date",
+            "description": "Creation date",
+            "example": "2026-01-01"
+          },
+          "annualLeaveDays": {
+            "type": "number",
+            "description": "Annual leave days",
+            "example": 30
+          }
+        }
+      },
+      "TimeEntryRequest": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "hoursWorked": {
+            "type": "number",
+            "maximum": 24,
+            "minimum": 0.5
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "TimeEntryResponse": {
+        "type": "object",
+        "description": "Response representing a time entry logged by an employee",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Time entry ID",
+            "example": 100
+          },
+          "employeeName": {
+            "type": "string",
+            "description": "Employee full name",
+            "example": "Mario Rossi"
+          },
+          "projectName": {
+            "type": "string",
+            "description": "Project name",
+            "example": "HRMS Platform"
+          },
+          "projectId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Project ID",
+            "example": 10
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date of the time entry",
+            "example": "2026-06-25"
+          },
+          "hoursWorked": {
+            "type": "number",
+            "description": "Hours worked",
+            "example": 8.5
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional description of work done",
+            "example": "Implemented authentication module"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date",
+            "description": "Creation date of the entry",
+            "example": "2026-06-25"
+          }
+        }
+      },
+      "ProjectRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string"
+          },
+          "clientName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PLANNED",
+              "IN_PROGRESS",
+              "ON_HOLD",
+              "COMPLETED",
+              "CANCELLED"
+            ]
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "budget": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "clientName",
+          "name"
+        ]
+      },
+      "ProjectResponse": {
+        "type": "object",
+        "description": "Full project details response",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Project name",
+            "example": "HRMS Platform"
+          },
+          "description": {
+            "type": "string",
+            "description": "Project description",
+            "example": "Internal HR management system"
+          },
+          "clientName": {
+            "type": "string",
+            "description": "Client name",
+            "example": "ACME Corp"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Project start date",
+            "example": "2025-01-01"
+          },
+          "status": {
+            "type": "string",
+            "description": "Project status",
+            "enum": [
+              "PLANNED",
+              "IN_PROGRESS",
+              "ON_HOLD",
+              "COMPLETED",
+              "CANCELLED"
+            ],
+            "example": "IN_PROGRESS"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Project end date",
+            "example": "2026-12-31"
+          },
+          "budget": {
+            "type": "number",
+            "description": "Project budget",
+            "example": 50000
+          }
+        }
+      },
+      "AssignEmployeeRequest": {
+        "type": "object",
+        "properties": {
+          "employeeId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "projectId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "PROJECT_MANAGER",
+              "TECH_LEAD",
+              "DEVELOPER",
+              "QA_ENGINEER",
+              "DESIGNER",
+              "CONSULTANT"
+            ]
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": [
+          "employeeId",
+          "projectId",
+          "role",
+          "startDate"
+        ]
+      },
+      "LeaveRequestSubmitRequest": {
+        "type": "object",
+        "properties": {
+          "leaveType": {
+            "type": "string",
+            "enum": [
+              "SICK_LEAVE",
+              "CASUAL_LEAVE",
+              "EARNED_LEAVE",
+              "MATERNITY_LEAVE",
+              "PATERNITY_LEAVE",
+              "BEREAVEMENT_LEAVE",
+              "UNPAID_LEAVE"
+            ]
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "employeeNotes": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "endDate",
+          "startDate"
+        ]
+      },
+      "LeaveAccrualProcessResponse": {
+        "type": "object",
+        "properties": {
+          "processedEmployees": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "skippedEmployees": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "missingContractEmployees": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "EmployeeRequest": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 1
+          },
+          "lastName": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "nationality": {
+            "type": "string",
+            "minLength": 1
+          },
+          "birthPlace": {
+            "type": "string",
+            "minLength": 1
+          },
+          "phoneNumber": {
+            "type": "string",
+            "maxLength": 15,
+            "minLength": 4,
+            "pattern": "^[0-9+\\- ]+$"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 8,
+            "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-={}\\[\\]:;\"'\u003C\u003E,.?/]).{8,}$"
+          },
+          "personalEmail": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1
+          },
+          "address": {
+            "type": "string",
+            "minLength": 1
+          },
+          "city": {
+            "type": "string",
+            "minLength": 1
+          },
+          "country": {
+            "type": "string",
+            "minLength": 1
+          },
+          "postalCode": {
+            "type": "string",
+            "maxLength": 10,
+            "minLength": 5
+          },
+          "province": {
+            "type": "string",
+            "minLength": 1
+          },
+          "workLocation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ROLE_ADMIN",
+              "ROLE_HR",
+              "ROLE_EMPLOYEE"
+            ]
+          }
+        },
+        "required": [
+          "address",
+          "birthPlace",
+          "city",
+          "country",
+          "dateOfBirth",
+          "email",
+          "firstName",
+          "lastName",
+          "nationality",
+          "password",
+          "personalEmail",
+          "phoneNumber",
+          "postalCode",
+          "province",
+          "workLocation"
+        ]
+      },
+      "CreateEmployeeResponse": {
+        "type": "object",
+        "properties": {
+          "dateOfCreation": {
+            "type": "string",
+            "format": "date"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateProjectRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string"
+          },
+          "clientName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PLANNED",
+              "IN_PROGRESS",
+              "ON_HOLD",
+              "COMPLETED",
+              "CANCELLED"
+            ]
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "budget": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "clientName",
+          "name",
+          "startDate"
+        ]
+      },
+      "UpdateProjectResponse": {
+        "type": "object",
+        "properties": {
+          "dateOfUpdate": {
+            "type": "string",
+            "format": "date"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateEmployeeRequest": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 1
+          },
+          "lastName": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "nationality": {
+            "type": "string"
+          },
+          "personalEmail": {
+            "type": "string",
+            "format": "email"
+          },
+          "birthPlace": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "maxLength": 15,
+            "minLength": 4,
+            "pattern": "^[0-9+\\- ]+$"
+          },
+          "address": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "postalCode": {
+            "type": "string",
+            "maxLength": 10,
+            "minLength": 5
+          },
+          "province": {
+            "type": "string"
+          },
+          "workLocation": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateEmployeeResponse": {
+        "type": "object",
+        "properties": {
+          "dateOfUpdate": {
+            "type": "string",
+            "format": "date"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ProjectHoursReportResponse": {
+        "type": "object",
+        "description": "Report of total hours worked on a project including all time entries",
+        "properties": {
+          "projectId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Project ID",
+            "example": 10
+          },
+          "projectName": {
+            "type": "string",
+            "description": "Project name",
+            "example": "HRMS Platform"
+          },
+          "totalHours": {
+            "type": "number",
+            "description": "Total hours logged for the project",
+            "example": 125.5
+          },
+          "entries": {
+            "type": "array",
+            "description": "List of time entries associated with the project",
+            "items": {
+              "$ref": "#/components/schemas/TimeEntryResponse"
+            }
+          }
+        }
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ProjectSummaryResponse": {
+        "type": "object",
+        "description": "Lightweight response containing essential project information",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Project ID",
+            "example": 10
+          },
+          "name": {
+            "type": "string",
+            "description": "Project name",
+            "example": "HRMS Platform"
+          },
+          "clientName": {
+            "type": "string",
+            "description": "Client name",
+            "example": "ACME Corp"
+          },
+          "status": {
+            "type": "string",
+            "description": "Project status",
+            "enum": [
+              "PLANNED",
+              "IN_PROGRESS",
+              "ON_HOLD",
+              "COMPLETED",
+              "CANCELLED"
+            ],
+            "example": "IN_PROGRESS"
+          }
+        }
+      },
+      "EmployeeProjectAssignmentResponse": {
+        "type": "object",
+        "properties": {
+          "employeeId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "employeeFullName": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "PROJECT_MANAGER",
+              "TECH_LEAD",
+              "DEVELOPER",
+              "QA_ENGINEER",
+              "DESIGNER",
+              "CONSULTANT"
+            ]
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "ProjectEmployeeAssignmentResponse": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "projectName": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "PROJECT_MANAGER",
+              "TECH_LEAD",
+              "DEVELOPER",
+              "QA_ENGINEER",
+              "DESIGNER",
+              "CONSULTANT"
+            ]
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "LeaveBalanceResponse": {
+        "type": "object",
+        "properties": {
+          "accruedDays": {
+            "type": "number"
+          },
+          "usedDays": {
+            "type": "number"
+          },
+          "pendingDays": {
+            "type": "number"
+          },
+          "availableDays": {
+            "type": "number"
+          },
+          "accruedHours": {
+            "type": "number"
+          },
+          "usedHours": {
+            "type": "number"
+          },
+          "pendingHours": {
+            "type": "number"
+          },
+          "availableHours": {
+            "type": "number"
+          },
+          "lastAccrualDate": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "LeaveBalanceSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "accruedDays": {
+            "type": "number"
+          },
+          "usedDays": {
+            "type": "number"
+          },
+          "pendingDays": {
+            "type": "number"
+          },
+          "availableDays": {
+            "type": "number"
+          },
+          "accruedHours": {
+            "type": "number"
+          },
+          "usedHours": {
+            "type": "number"
+          },
+          "pendingHours": {
+            "type": "number"
+          },
+          "availableHours": {
+            "type": "number"
+          },
+          "lastAccrualDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "nextMonthExpectedDays": {
+            "type": "number"
+          },
+          "nextMonthExpectedHours": {
+            "type": "number"
+          }
+        }
+      },
+      "LeaveAccrualLogResponse": {
+        "type": "object",
+        "properties": {
+          "accrualMonth": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "accrualYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "daysAccrued": {
+            "type": "number"
+          },
+          "hoursAccrued": {
+            "type": "number"
+          },
+          "contractSnapshot": {
+            "type": "string"
+          },
+          "processedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "EmployeeSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          }
+        }
+      },
+      "PageEmployeeSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmployeeSummaryResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageableObject": {
+        "type": "object",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paged": {
+            "type": "boolean"
+          },
+          "unpaged": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SortObject": {
+        "type": "object",
+        "properties": {
+          "empty": {
+            "type": "boolean"
+          },
+          "sorted": {
+            "type": "boolean"
+          },
+          "unsorted": {
+            "type": "boolean"
+          }
+        }
+      },
+      "EmployeeDetailResponse": {
+        "type": "object",
+        "description": "Detailed employee information response",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Employee ID",
+            "example": 1
+          },
+          "firstName": {
+            "type": "string",
+            "description": "First name",
+            "example": "Mario"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Last name",
+            "example": "Rossi"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date",
+            "description": "Date of birth",
+            "example": "1990-05-20"
+          },
+          "gender": {
+            "type": "string",
+            "description": "Gender",
+            "example": "M"
+          },
+          "nationality": {
+            "type": "string",
+            "description": "Nationality",
+            "example": "Italian"
+          },
+          "birthPlace": {
+            "type": "string",
+            "description": "Birth place",
+            "example": "Rome"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Phone number",
+            "example": "+39 333 1234567"
+          },
+          "address": {
+            "type": "string",
+            "description": "Street address",
+            "example": "Via Roma 10"
+          },
+          "city": {
+            "type": "string",
+            "description": "City",
+            "example": "Rome"
+          },
+          "province": {
+            "type": "string",
+            "description": "Province",
+            "example": "RM"
+          },
+          "postalCode": {
+            "type": "string",
+            "description": "Postal code",
+            "example": "00100"
+          },
+          "country": {
+            "type": "string",
+            "description": "Country",
+            "example": "Italy"
+          },
+          "workLocation": {
+            "type": "string",
+            "description": "Work location",
+            "example": "Rome HQ"
+          }
+        }
+      },
+      "ContractSummaryResponse": {
+        "type": "object",
+        "description": "Lightweight contract summary response",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Contract ID",
+            "example": 1
+          },
+          "contractType": {
+            "type": "string",
+            "description": "Contract type",
+            "enum": [
+              "FULL_TIME",
+              "PART_TIME",
+              "FIXED_TIME",
+              "INTERNSHIP",
+              "FREELANCE"
+            ],
+            "example": "FULL_TIME"
+          },
+          "position": {
+            "type": "string",
+            "description": "Job position",
+            "example": "Backend Developer"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Start date",
+            "example": "2026-01-01"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date",
+            "description": "End date",
+            "example": "2027-01-01"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Active status",
+            "example": true
+          },
+          "monthlyLeaveDays": {
+            "type": "number",
+            "description": "Monthly leave days",
+            "example": 2.5
+          },
+          "monthlyLeaveHours": {
+            "type": "number",
+            "description": "Monthly leave hours",
+            "example": 16
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "name": "bearerAuth",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
