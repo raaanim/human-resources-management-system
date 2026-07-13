@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component("projectSecurity")
 public class ProjectSecurity {
 
@@ -20,6 +22,6 @@ public class ProjectSecurity {
             Project project = projectRepository.findById(id)
                     .orElseThrow(() -> new ProjectException("Project not found", HttpStatus.NOT_FOUND, "project/{id}"));
 
-            return project.getId() == id;
+            return Objects.equals(project.getId(), id);
         }
     }

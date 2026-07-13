@@ -53,7 +53,9 @@ public class EmployeeService implements IEmployeeService {
 
         Employee savedEmployee = employeeRepository.save(employee);
 
-        LeaveBalance leaveBalance = LeaveBalanceUtils.createLeaveBalanceForEmployee(savedEmployee);
+        LeaveBalance leaveBalance =
+                LeaveBalanceUtils.createLeaveBalanceForEmployee(savedEmployee);
+        savedEmployee.setLeaveBalance(leaveBalance);
 
         leaveBalanceRepository.save(leaveBalance);
         leaveAccrualService.processFirstMonthAccrual(savedEmployee);
